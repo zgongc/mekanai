@@ -533,9 +533,10 @@ document.getElementById('projectModal').addEventListener('click', function(e) {
 
 // ── Receive image from Canvas/Sketch (sessionStorage) ─
 (function() {
-    const b64 = sessionStorage.getItem('mekanai_enhance_image');
+    let b64;
+    try { b64 = sessionStorage.getItem('mekanai_enhance_image'); } catch(e) { return; }
     if (!b64) return;
-    sessionStorage.removeItem('mekanai_enhance_image');
+    try { sessionStorage.removeItem('mekanai_enhance_image'); } catch(e) {}
     sourceBase64 = b64;
     document.getElementById('sourcePreview').innerHTML =
         `<img src="data:image/png;base64,${b64}" alt="Source" id="sourceImage">

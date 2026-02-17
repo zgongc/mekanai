@@ -5,7 +5,8 @@ const themeText = document.getElementById('themeText');
 const html = document.documentElement;
 
 // Load theme from localStorage
-const savedTheme = localStorage.getItem('theme') || 'dark';
+let savedTheme = 'dark';
+try { savedTheme = localStorage.getItem('theme') || 'dark'; } catch(e) {}
 html.setAttribute('data-theme', savedTheme);
 updateThemeUI(savedTheme);
 
@@ -16,7 +17,7 @@ if (themeToggle) {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
         html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        try { localStorage.setItem('theme', newTheme); } catch(e) {}
         updateThemeUI(newTheme);
     });
 }
@@ -40,7 +41,7 @@ if (themeSelect) {
     themeSelect.addEventListener('change', (e) => {
         const newTheme = e.target.value;
         html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        try { localStorage.setItem('theme', newTheme); } catch(e) {}
         updateThemeUI(newTheme);
     });
 }

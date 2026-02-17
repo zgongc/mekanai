@@ -268,11 +268,11 @@ let _initializing = true;
 
 function savePref(key, value) {
     if (_initializing) return;
-    localStorage.setItem(LS_PREFIX + key, value);
+    try { localStorage.setItem(LS_PREFIX + key, value); } catch(e) {}
 }
 
 function loadPref(key) {
-    return localStorage.getItem(LS_PREFIX + key);
+    try { return localStorage.getItem(LS_PREFIX + key); } catch(e) { return null; }
 }
 
 function restoreSelect(selectId, lsKey) {
@@ -642,13 +642,13 @@ function saveToProject(projectId) {
 
 function sendToSketch() {
     if (!lastImageBase64) return;
-    sessionStorage.setItem('mekanai_sketch_source', lastImageBase64);
+    try { sessionStorage.setItem('mekanai_sketch_source', lastImageBase64); } catch(e) {}
     window.location.href = '/sketch';
 }
 
 function sendToEnhance() {
     if (!lastImageBase64) return;
-    sessionStorage.setItem('mekanai_enhance_image', lastImageBase64);
+    try { sessionStorage.setItem('mekanai_enhance_image', lastImageBase64); } catch(e) {}
     window.location.href = '/enhance';
 }
 

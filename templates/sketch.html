@@ -326,11 +326,11 @@ let _initializing = true;
 
 function savePref(key, value) {
     if (_initializing) return;
-    localStorage.setItem(LS_PREFIX + key, value);
+    try { localStorage.setItem(LS_PREFIX + key, value); } catch(e) {}
 }
 
 function loadPref(key) {
-    return localStorage.getItem(LS_PREFIX + key);
+    try { return localStorage.getItem(LS_PREFIX + key); } catch(e) { return null; }
 }
 
 function restoreSelect(selectId, lsKey) {
@@ -773,7 +773,7 @@ function saveToProject(projectId) {
 
 function sendToEnhance() {
     if (!lastImageBase64) return;
-    sessionStorage.setItem('mekanai_enhance_image', lastImageBase64);
+    try { sessionStorage.setItem('mekanai_enhance_image', lastImageBase64); } catch(e) {}
     window.location.href = '/enhance';
 }
 
@@ -807,9 +807,10 @@ checkProviderStatus();
 
 // ── Receive source from Canvas ──────────────────
 (function() {
-    const b64 = sessionStorage.getItem('mekanai_sketch_source');
+    let b64;
+    try { b64 = sessionStorage.getItem('mekanai_sketch_source'); } catch(e) { return; }
     if (!b64) return;
-    sessionStorage.removeItem('mekanai_sketch_source');
+    try { sessionStorage.removeItem('mekanai_sketch_source'); } catch(e) {}
     document.getElementById('sourcePreview').innerHTML =
         `<img src="data:image/png;base64,${b64}" alt="Canvas source" id="sourceImage">`;
     window._sketchSourceBase64 = b64;
