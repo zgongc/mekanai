@@ -10,7 +10,12 @@ Base = declarative_base()
 
 # ── Engine & Session (module-level) ──────────────
 _db_path = config.get('database.path', 'data/db/mekanai.db')
-engine = create_engine(f"sqlite:///{_db_path}", echo=False, pool_pre_ping=True)
+engine = create_engine(
+    f"sqlite:///{_db_path}",
+    echo=False,
+    pool_pre_ping=True,
+    connect_args={"check_same_thread": False},
+)
 
 
 def _set_sqlite_pragma(dbapi_conn, connection_record):
