@@ -1,49 +1,47 @@
 @echo off
-chcp 65001 >NUL
 echo ========================================
-echo    MekanAI - Kurulum
+echo    MekanAI - Setup
 echo ========================================
 echo.
 
-:: Python kontrolü
-echo [1/4] Python kontrolü yapılıyor...
+:: Check Python
+echo [1/4] Checking Python...
 py -c "" >tmp_stdout.txt 2>tmp_stderr.txt
 if %ERRORLEVEL% == 0 goto :python_found
 
-echo ⚠️  Python bulunamadı!
+echo [!] Python not found!
 echo.
 
-:: Python yoksa winget kontrolü
-echo [1.1] Otomatik kurulum için winget kontrol ediliyor...
+:: Try winget auto-install
+echo [1.1] Checking winget for auto-install...
 WHERE winget >nul 2>&1
 if %ERRORLEVEL% == 0 goto :install_with_winget
 
-:: Winget de yoksa manuel kurulum
-echo ⚠️  Winget bulunamadı
+echo [!] Winget not found
 goto :manual_python_install
 
 :install_with_winget
-echo ✅ Winget bulundu
+echo [OK] Winget found
 echo.
-echo 🔽 Python 3.12 otomatik yükleniyor...
-echo    (Bu işlem birkaç dakika sürebilir)
+echo [*] Installing Python 3.12 automatically...
+echo     (This may take a few minutes)
 echo.
 
 winget install -e --id Python.Python.3.12 --silent --accept-source-agreements --accept-package-agreements
 if %ERRORLEVEL% == 0 goto :python_installed_success
 
 echo.
-echo ❌ Winget ile yükleme başarısız oldu.
+echo [!] Winget installation failed.
 goto :manual_python_install
 
 :python_installed_success
 echo.
-echo ✅ Python başarıyla yüklendi!
+echo [OK] Python installed successfully!
 echo.
-echo ⚠️  ÖNEMLI: Değişikliklerin geçerli olması için:
-echo    1. Bu pencereyi kapatın
-echo    2. Yeni bir komut istemi açın
-echo    3. setup.bat'ı tekrar çalıştırın
+echo [!] IMPORTANT: To apply changes:
+echo     1. Close this window
+echo     2. Open a new command prompt
+echo     3. Run setup.bat again
 echo.
 pause
 exit /b 0
@@ -51,111 +49,111 @@ exit /b 0
 :manual_python_install
 echo.
 echo ========================================
-echo    Manuel Python Kurulumu Gerekli
+echo    Manual Python Installation Required
 echo ========================================
 echo.
-echo YÖNTEM 1 - Winget (Önerilen):
-echo    winget install -e --id Python.Python.3.12
+echo OPTION 1 - Winget (Recommended):
+echo     winget install -e --id Python.Python.3.12
 echo.
-echo YÖNTEM 2 - Manuel:
-echo    1. https://www.python.org/downloads/
-echo    2. "Add Python to PATH" seçeneğini işaretleyin
+echo OPTION 2 - Manual:
+echo     1. https://www.python.org/downloads/
+echo     2. Check "Add Python to PATH" during install
 echo.
 pause
 exit /b 1
 
 :python_found
 py --version
-echo ✅ Python yüklü
+echo [OK] Python installed
 echo.
 
 :: Virtual Environment
-echo [2/4] Virtual Environment kontrolü...
+echo [2/4] Checking Virtual Environment...
 if exist "venv\" goto :venv_exists
 
-echo ⚙️  Virtual environment oluşturuluyor...
+echo [*] Creating virtual environment...
 py -m venv venv
 if %ERRORLEVEL% == 0 goto :venv_created
 
-echo ❌ HATA: Virtual environment oluşturulamadı!
+echo [!] ERROR: Could not create virtual environment!
 pause
 exit /b 1
 
 :venv_created
-echo ✅ Virtual environment oluşturuldu
+echo [OK] Virtual environment created
 goto :activate_venv
 
 :venv_exists
-echo ✅ Virtual environment mevcut
+echo [OK] Virtual environment exists
 
 :activate_venv
 echo.
-echo [3/4] Virtual environment aktive ediliyor...
+echo [3/4] Activating virtual environment...
 call venv\Scripts\activate.bat
 if %ERRORLEVEL% == 0 goto :venv_activated
 
-echo ❌ HATA: Virtual environment aktive edilemedi!
+echo [!] ERROR: Could not activate virtual environment!
 pause
 exit /b 1
 
 :venv_activated
-echo ✅ Virtual environment aktif
+echo [OK] Virtual environment active
 echo.
 
-:: Pip güncellemesi
+:: Pip upgrade
 python -m pip install --upgrade pip --quiet
-echo ✅ pip güncellendi
+echo [OK] pip updated
 echo.
 
-:: Temel paketler
-echo [4/4] Temel paketler yükleniyor...
+:: Install packages
+echo [4/4] Installing packages...
 pip install -r requirements.txt --quiet
-echo ✅ Temel paketler yüklendi
+echo [OK] Packages installed
 echo.
 
-:: GPU paketleri (opsiyonel)
+:: GPU packages (optional)
 echo ========================================
-echo    GPU / Lokal SD WebUI Desteği
+echo    GPU / Local SD WebUI Support
 echo ========================================
 echo.
-echo PyTorch + CUDA yüklemek ister misiniz?
-echo (Sadece NVIDIA ekran kartı ve lokal SD WebUI kullanacaksanız gerekli)
+echo Install PyTorch + CUDA?
+echo (Only needed if you have an NVIDIA GPU and will use local SD WebUI)
 echo.
-echo    [1] Evet - CUDA 12.1 ile PyTorch yükle (önerilen, ~3GB)
-echo    [2] Hayır - Sadece Cloud API kullanacağım
+echo    [1] Yes - Install PyTorch with CUDA 12.1 (recommended, ~3GB)
+echo    [2] No  - I will only use Cloud APIs
 echo.
-set /p gpu_choice="Seçiminiz (1/2): "
+set /p gpu_choice="Your choice (1/2): "
 
 if "%gpu_choice%"=="1" goto :install_gpu
-echo ⏭️  GPU paketleri atlandı.
-echo    İstediğiniz zaman yükleyebilirsiniz:
-echo    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-echo    pip install -r requirements-gpu.txt
+echo [*] GPU packages skipped.
+echo     You can install later:
+echo     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+echo     pip install -r requirements-gpu.txt
 goto :finish_setup
 
 :install_gpu
 echo.
-echo ⚙️  PyTorch CUDA yükleniyor... (Birkaç dakika sürebilir)
+echo [*] Installing PyTorch CUDA... (This may take a few minutes)
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121 --quiet
-echo ⚙️  Diğer GPU paketleri yükleniyor...
+echo [*] Installing other GPU packages...
 pip install -r requirements-gpu.txt --quiet
-echo ✅ GPU paketleri yüklendi
+echo [OK] GPU packages installed
 
 :finish_setup
 echo.
 echo ========================================
-echo    ✅ KURULUM TAMAMLANDI!
+echo    [OK] SETUP COMPLETE!
 echo ========================================
 echo.
-echo Uygulamayı başlatmak için:
-echo    start.bat
+echo To start the application:
+echo     start.bat
 echo.
-echo Veya manuel olarak:
-echo    venv\Scripts\activate
-echo    python app.py
+echo Or manually:
+echo     venv\Scripts\activate
+echo     python app.py
 echo.
 pause
 
-:: Temizlik
+:: Cleanup
 del tmp_stdout.txt 2>nul
 del tmp_stderr.txt 2>nul
