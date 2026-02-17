@@ -56,11 +56,15 @@ def create_app():
     # Error handlers
     register_error_handlers(app)
 
-    # Keep-alive headers for long-running AI generation requests
     @app.after_request
-    def add_connection_headers(response):
+    def add_headers(response):
+        # Keep-alive for long-running AI generation requests
         response.headers['Connection'] = 'keep-alive'
         response.headers['Keep-Alive'] = 'timeout=300'
+        # Cache static files (CSS, JS, images, fonts)
+        if response.content_type and any(t in response.content_type for t in
+                ('text/css', 'javascript', 'image/', 'font/')):
+            response.headers['Cache-Control'] = 'public, max-age=3600'
         return response
 
     print(f"[+] {config.get('system.name')} v{config.get('system.version')} initialized")
