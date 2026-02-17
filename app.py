@@ -58,9 +58,6 @@ def create_app():
 
     @app.after_request
     def add_headers(response):
-        # Keep-alive for long-running AI generation requests
-        response.headers['Connection'] = 'keep-alive'
-        response.headers['Keep-Alive'] = 'timeout=300'
         # Cache static files (CSS, JS, images, fonts)
         if response.content_type and any(t in response.content_type for t in
                 ('text/css', 'javascript', 'image/', 'font/')):
@@ -94,10 +91,11 @@ app = create_app()
 
 if __name__ == '__main__':
     config = app.config['APP_CONFIG']
+    host = config.get('server.host', '0.0.0.0')
+    port = config.get('server.port', 5000)
 
     app.run(
-        host=config.get('server.host', '0.0.0.0'),
-        port=config.get('server.port', 5000),
-        debug=config.get('system.debug_mode', True),
+        host=host, port=port,
+        debug=config.get('system.debug_mode', False),
         threaded=True
     )
