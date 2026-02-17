@@ -1,215 +1,128 @@
-# MekanAI - Kurulum Rehberi (Windows)
+# MekanAI - Kurulum Rehberi
 
-## Gereksinimler
+## 1. Kurulum (İlk Defa)
 
-- Windows 10/11
-- Python 3.10 veya uzeri ([Indir](https://www.python.org/downloads/))
-- SD WebUI Forge (Lokal AI icin - opsiyonel)
+### Windows
 
-## Hizli Baslangic
+1. Bu sayfadaki yeşil **`<> Code`** butonuna tıklayın
+2. Açılan menüden **Download ZIP** seçin
+3. İndirilen ZIP dosyasına sağ tıklayın → **Tümü Çıkart** (Extract All) seçin
+4. Çıkan `mekanai-main` klasörünün içine girin
+5. **`setup.bat`** dosyasını bulun ve çift tıklayın
+6. Siyah bir komut penceresi açılacak — kurulum otomatik başlar
 
-### 1. Kurulum (Ilk Defa)
+**Setup ne yapar?**
+- Python yüklü mü kontrol eder (yoksa otomatik yükler)
+- Proje için izole bir Python ortamı (venv) oluşturur
+- Flask, Pillow, SQLAlchemy gibi gerekli kütüphaneleri yükler
+- Size GPU/CUDA kurulumu isteyip istemediğinizi sorar (lokal AI için gerekli)
 
-Proje klasorunde calistirin:
-```
-setup.bat
-```
+> Kurulum tamamlanınca "SETUP COMPLETE!" yazısını göreceksiniz.
+> Bir tuşa basıp pencereyi kapatabilirsiniz.
 
-**Setup.bat ne yapar?**
-- Python yuklu mu kontrol eder
-- Virtual environment olusturur
-- Flask ve gerekli paketleri yukler
+### Linux / Mac
 
-### 2. Uygulamayi Baslat
-
-```
-start.bat
-```
-
-Tarayicida acilir: `http://localhost:5000`
-
-Ag uzerinden erisim: `http://<IP_ADRESINIZ>:5000`
-
-## Manuel Kurulum (Alternatif)
+Terminal açın ve sırasıyla çalıştırın:
 
 ```bash
-# 1. Virtual environment olustur
-python -m venv venv
-
-# 2. Aktive et
-venv\Scripts\activate
-
-# 3. Paketleri yukle
-pip install -r requirements.txt
-
-# 4. GPU paketleri (opsiyonel - sadece NVIDIA GPU + lokal SD WebUI için)
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-pip install -r requirements-gpu.txt
-
-# 5. Calistir
-python app.py
+git clone https://github.com/zgongc/mekanai.git
+cd mekanai
+chmod +x setup.sh start.sh
+./setup.sh
 ```
 
 ---
 
-## Cloud API Entegrasyonu
+## 2. Başlatma (Her Seferinde)
 
-MekanAI, birden fazla AI saglayicisini destekler. API key'leri **Settings > Providers** sayfasindan eklenir.
+### Windows
 
-### Stability AI (Onerilen)
+`mekanai` klasöründeki **`start.bat`** dosyasına çift tıklayın.
 
-Desteklenen ozellikler: Text-to-Image, Structure Control (Floorplan img2img)
+Siyah pencere açılacak ve tarayıcınız otomatik olarak **http://localhost:5000** adresini açacak.
 
-| Bilgi | Deger |
-|-------|-------|
-| Kayit | [https://platform.stability.ai](https://platform.stability.ai) |
-| API Key | Platform > API Keys > Create API Key |
-| Fiyat | ~$0.03/gorsel (Stable Image Core) |
-| Modeller | Stable Image Core, SD3.5, Stable Image Ultra |
+> Tarayıcı açılmazsa, adres çubuğuna `http://localhost:5000` yazın.
+> Siyah pencereyi kapatmayın — uygulama o pencerede çalışıyor.
+> Durdurmak için siyah pencerede **CTRL+C** tuşlayına basın.
 
-**Kurulum:**
-1. [platform.stability.ai](https://platform.stability.ai) adresinden hesap olusturun
-2. Dashboard > API Keys > **Create API Key**
-3. MekanAI > Settings > Providers > **Stability AI** > API Key alanina yapisirin
-4. Canvas veya Floorplan'da Provider olarak **Stability AI** secin
-
-### Google Gemini
-
-Desteklenen ozellikler: Text-to-Image (Gemini Flash Image, Imagen 4)
-
-| Bilgi | Deger |
-|-------|-------|
-| API Key | [https://aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
-| Fiyat | ~$0.04/gorsel (Gemini Flash Image) |
-| Onemli | Billing (faturalandirma) aktif olmali |
-| Modeller | Gemini 2.5 Flash Image, Imagen 4 Fast |
-
-**Kurulum:**
-1. [aistudio.google.com/apikey](https://aistudio.google.com/apikey) adresinden API key olusturun
-2. AI Studio > Settings > Billing > **Pay-as-you-go** planini aktif edin
-3. MekanAI > Settings > Providers > **Google Gemini** > API Key alanina yapisirin
-
-> **Not:** gemini.google.com aboneligi (Antigravity/Gemini Pro) API erisimi saglamaz.
-> API icin ayri olarak Google Cloud billing gereklidir.
-
-### OpenAI (DALL-E 3)
-
-Desteklenen ozellikler: Text-to-Image
-
-| Bilgi | Deger |
-|-------|-------|
-| Kayit | [https://platform.openai.com](https://platform.openai.com) |
-| API Key | Platform > API Keys > Create new secret key |
-| Fiyat | $0.04/gorsel (1024x1024), $0.08/gorsel (1792x1024) |
-| Modeller | DALL-E 3 |
-
-**Kurulum:**
-1. [platform.openai.com](https://platform.openai.com) adresinden hesap olusturun
-2. Settings > Billing > kredi/odeme yontemi ekleyin
-3. API Keys > **Create new secret key**
-4. MekanAI > Settings > Providers > **OpenAI** > API Key alanina yapisirin
-
-### xAI Grok
-
-| Bilgi | Deger |
-|-------|-------|
-| Kayit | [https://console.x.ai](https://console.x.ai) |
-| API Key | Console > API Keys |
-
-> Grok gorsel uretim entegrasyonu henuz aktif degil.
-
----
-
-## Lokal AI: SD WebUI Forge
-
-Lokal GPU ile gorsel uretim icin SD WebUI Forge kullanilir.
-
-### Gereksinimler
-- NVIDIA GPU (RTX 3060+ onerilen, 8GB+ VRAM)
-- CUDA destekli suruculer
-
-### Kurulum
+### Linux / Mac
 
 ```bash
-# 1. SD WebUI Forge'u klonla
-git clone https://github.com/lllyasviel/stable-diffusion-webui-forge.git
-
-# 2. Baslat (ilk kurulum otomatik yapilir)
-cd stable-diffusion-webui-forge
-webui.bat --api --listen
+./start.sh
 ```
 
-### API Modunda Baslatma
+### Ağ Üzerinden Erişim
 
-SD WebUI Forge'u API modunda baslatmak icin `webui-user.bat` dosyasini duzenleyin:
-```bat
-set COMMANDLINE_ARGS=--api --listen
+Başka bir bilgisayardan erişmek için, MekanAI'nin çalıştığı bilgisayarın IP adresiyle:
+
 ```
-
-Varsayilan adres: `http://localhost:7860`
-
-### MekanAI'ya Baglama
-
-1. SD WebUI Forge'un calistigini dogrulayin: `http://<FORGE_IP>:7860`
-2. MekanAI > Settings > Providers > **SD WebUI Forge** > Base URL'i girin
-   - Ayni bilgisayar: `http://localhost:7860`
-   - Ag uzerinden: `http://192.168.1.XXX:7860`
-
-### Checkpoint Modelleri
-
-Modelleri SD WebUI Forge'un `models/Stable-diffusion/` klasorune koyun:
-- Mimari: Architecture Exterior, DvArch, Architecture RealMix
-- Genel: RealVisXL, SDXL Base, FLUX.1 Schnell
-- Hizli: SDXL Turbo, SatPony Lightning
+http://192.168.1.XXX:5000
+```
 
 ---
 
-## Sorun Giderme
+## 3. AI Sunucu Bağlantısı
 
-### "Python bulunamadi" hatasi
-- Python'u [buradan](https://www.python.org/downloads/) indirin
-- Kurulumda **"Add Python to PATH"** secenegini isaretleyin
+MekanAI tek başına görsel üretmez — bir AI motoruna bağlanır. İki yol var:
 
-### Port 5000 kullanimda
-`configs/config.yaml` dosyasinda portu degistirin:
-```yaml
-server:
-  port: 8080
-```
+### Yol A: Lokal GPU ile Ücretsiz Üretim (Önerilen)
 
-### SD WebUI Forge baglanti hatasi
-- Forge'un `--api --listen` parametreleriyle calistigini dogrulayin
-- Firewall ayarlarinizi kontrol edin (port 7860)
-- Settings > Providers'dan Base URL'in dogru oldugunu kontrol edin
+Bilgisayarınızda NVIDIA GPU varsa (RTX 3060+ önerilen):
 
-### Cloud API hatalari
+**SD WebUI Forge kurulumu:**
+1. https://github.com/lllyasviel/stable-diffusion-webui-forge adresinden indirin
+2. `webui.bat --listen --api` ile başlatın (ilk açılışta otomatik kurulum yapar)
+3. MekanAI > Ayarlar > Providers > **SD WebUI Forge** > Base URL: `http://localhost:7860`
+4. Enable edin — artık Canvas, Sketch, Floorplan, Enhance kullanabilirsiniz
 
-| Hata | Cozum |
-|------|-------|
-| "API key ayarlanmamis" | Settings > Providers'dan key ekleyin |
-| "Billing hard limit reached" | Provider platformundan kredi/limit ekleyin |
-| "Quota exceeded" | Billing/faturalandirma aktif edin |
-| "Unauthorized" | API key'in dogru oldugunu kontrol edin |
+**ComfyUI kurulumu (alternatif):**
+1. https://github.com/comfyanonymous/ComfyUI adresinden indirin
+2. `python main.py --listen 0.0.0.0` ile başlatın
+3. MekanAI > Ayarlar > Providers > **ComfyUI** > Base URL: `http://localhost:8188`
 
----
+> Lokal AI ile sınırsız görsel üretebilirsiniz — ek maliyet yoktur.
 
-## Ozellikler
+### Yol B: Cloud API (GPU Gerektirmez)
 
-- Text-to-Image (Canvas) - Prompt'tan gorsel uretim
-- Sketch-to-Image (Sketch) - Cizimden render
-- Floorplan Render - Kat planindan 3D gorunum
-- Image Enhance - Gorsel iyilestirme ve upscale
-- Coklu Provider - Local + Stability AI + Gemini + OpenAI
-- Stil/Perspektif/Aydinlatma - Prompt snippet'leri ile zenginlestirme
-- Proje Yonetimi - Gorselleri projelerde organize etme
-- Dark/Light Mode
+GPU'nuz yoksa veya hızlı sonuç istiyorsanız Cloud API kullanabilirsiniz:
+
+1. MekanAI'yi başlatın → sol menüden **Ayarlar** sayfasına gidin
+2. **Providers** sekmesinden istediğiniz servisi seçin
+3. API anahtarını yapıştırın ve **Enable** edin
+
+| Servis | API Key Nereden Alınır | Ücret |
+|--------|----------------------|-------|
+| Google Gemini | https://aistudio.google.com/apikey | Ücretsiz tier mevcut |
+| xAI Grok | https://console.x.ai | Kayıtta $25 ücretsiz kredi |
+| Stability AI | https://platform.stability.ai | Kredi bazlı (~$0.03/görsel) |
+| OpenAI DALL-E | https://platform.openai.com | ~$0.04/görsel |
+
+> Detaylı API key alma adımları için: MekanAI içinden **Yardım** sayfasına bakın.
 
 ---
 
-## Yapilandirma Dosyalari
+## 4. Sorun Giderme
 
-| Dosya | Aciklama |
-|-------|----------|
-| `configs/config.yaml` | Sunucu, veritabani, yol ayarlari |
-| `data/db/mekanai.db` | SQLite veritabani |
-| `data/seed/*.json` | Baslangic verileri (stiller, modeller vs.) |
+**setup.bat çift tıklayınca hiçbir şey olmuyor:**
+- Dosyaya sağ tıklayın → **Yönetici olarak çalıştır** (Run as Administrator)
+- Antivirüs/Windows Defender engelliyorsa geçici olarak kapatın
+
+**"Python not found" hatası:**
+- https://www.python.org/downloads/ adresinden Python 3.12 indirin
+- Kurulumda **"Add Python to PATH"** kutucuğunu mutlaka işaretleyin
+- Bilgisayarı yeniden başlatın, sonra setup.bat'i tekrar çalıştırın
+
+**Sayfa açılmıyor (localhost:5000):**
+- start.bat'in hala çalıştığından emin olun (siyah pencere açık olmalı)
+- Farklı tarayıcı deneyin (Edge önerilen)
+- Firewall 5000 portunu engelliyor olabilir
+
+**SD WebUI / ComfyUI bağlantı hatası:**
+- AI sunucusunun çalıştığından emin olun
+- SD WebUI'yi `--listen --api` parametreleriyle başlatın
+- ComfyUI'yi `--listen 0.0.0.0` ile başlatın
+- Ayarlar'dan base URL'i kontrol edin
+
+**Chrome'da tercihler kaydedilmiyor:**
+- Adres çubuğundaki kilit/bilgi ikonuna tıklayın → Site ayarları → Çerezlere izin verin
+- Veya `chrome://settings/cookies` adresinden genel ayarları kontrol edin
