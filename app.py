@@ -56,6 +56,13 @@ def create_app():
     # Error handlers
     register_error_handlers(app)
 
+    # Keep-alive headers for long-running AI generation requests
+    @app.after_request
+    def add_connection_headers(response):
+        response.headers['Connection'] = 'keep-alive'
+        response.headers['Keep-Alive'] = 'timeout=300'
+        return response
+
     print(f"[+] {config.get('system.name')} v{config.get('system.version')} initialized")
 
     return app

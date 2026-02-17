@@ -585,12 +585,20 @@ function generateFloorplan() {
     const providerName = providerOpt?.textContent?.trim() || 'SD';
     viewport.innerHTML = `<div class="canvas-loading"><i class="fas fa-spinner fa-spin"></i><p>ControlNet + ${providerName} ile oluşturuluyor...</p></div>`;
 
+    // 5-minute timeout for long AI generation
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 300000);
+
     fetch('/api/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
+        body: JSON.stringify(params),
+        signal: controller.signal
     })
-    .then(r => r.json())
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+        return r.json();
+    })
     .then(data => {
         if (data.status === 'success' && data.image_base64) {
             lastImageBase64 = data.image_base64;
@@ -613,9 +621,12 @@ function generateFloorplan() {
         }
     })
     .catch(err => {
-        viewport.innerHTML = '<div class="canvas-empty"><i class="fas fa-exclamation-triangle"></i><h3>Bağlantı Hatası</h3><p>Sunucuya bağlanılamadı: ' + (err.message || err) + '</p></div>';
+        console.error('Generate fetch error:', err);
+        const detail = err.name === 'AbortError' ? 'İstek zaman aşımına uğradı (5dk)' : (err.message || 'Bağlantı hatası');
+        viewport.innerHTML = `<div class="canvas-empty"><i class="fas fa-exclamation-triangle"></i><h3>Bağlantı Hatası</h3><p>${providerName}: ${detail}</p></div>`;
     })
     .finally(() => {
+        clearTimeout(timeoutId);
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-magic"></i> Oluştur';
     });
