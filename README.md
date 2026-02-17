@@ -1,7 +1,8 @@
 # MekanAI - AI Interior Design Platform
 
 İç mimarlar için AI destekli görsel tasarım platformu.
-Lokal SD WebUI Forge + Cloud API (Gemini, Stability AI, OpenAI, Grok) hybrid çözüm.
+
+El çizimlerini ve kat planlarını, kendi bilgisayarınızdaki GPU ile **ücretsiz** olarak fotorealistik iç mekan görsellerine dönüştürün. Lokal AI (SD WebUI Forge, ComfyUI) ile sınırsız üretim yapın veya Cloud API'ler (Gemini, Stability AI, OpenAI, Grok) ile destekleyin.
 
 ## Özellikler
 
