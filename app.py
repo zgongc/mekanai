@@ -87,5 +87,6 @@ if __name__ == '__main__':
     app.run(
         host=config.get('server.host', '0.0.0.0'),
         port=config.get('server.port', 5000),
-        debug=config.get('system.debug_mode', True)
+        debug=config.get('system.debug_mode', True),
+        threaded=True
     )
