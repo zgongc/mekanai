@@ -1,0 +1,151 @@
+{
+  "perspectives": [
+    {
+      "name": "None",
+      "prompt_snippet": "",
+      "negative_snippet": "",
+      "thumbnail": "none.jpg",
+      "sort_order": 0
+    },
+    {
+      "name": "Ultra Wide Angle",
+      "prompt_snippet": "ultra wide angle lens, 14mm, expansive view, entire room visible, dramatic perspective distortion",
+      "negative_snippet": "close up, narrow view, cropped",
+      "thumbnail": "ultra_wide.jpg",
+      "sort_order": 1
+    },
+    {
+      "name": "Wide Angle View",
+      "prompt_snippet": "wide angle lens, 24mm, spacious feel, full room view, architectural photography",
+      "negative_snippet": "close up, narrow, cropped, telephoto",
+      "thumbnail": "wide_angle.jpg",
+      "sort_order": 2
+    },
+    {
+      "name": "Standard View",
+      "prompt_snippet": "standard lens, 35mm, natural perspective, eye-level view, balanced composition",
+      "negative_snippet": "distorted, fisheye, extreme angle",
+      "thumbnail": "standard.jpg",
+      "sort_order": 3
+    },
+    {
+      "name": "Medium Shot",
+      "prompt_snippet": "medium shot, 50mm lens, focused area, partial room view, balanced framing",
+      "negative_snippet": "extreme wide, full room, close up",
+      "thumbnail": "medium.jpg",
+      "sort_order": 4
+    },
+    {
+      "name": "Close Up",
+      "prompt_snippet": "close up shot, detail view, material texture, surface quality, shallow depth of field",
+      "negative_snippet": "wide angle, full room, distant",
+      "thumbnail": "close_up.jpg",
+      "sort_order": 5
+    },
+    {
+      "name": "Extreme Close Up",
+      "prompt_snippet": "extreme close up, macro detail, material grain, texture pattern, very shallow depth of field",
+      "negative_snippet": "wide, full room, distant, overview",
+      "thumbnail": "extreme_close.jpg",
+      "sort_order": 6
+    },
+    {
+      "name": "Front View",
+      "prompt_snippet": "front view, straight on, symmetrical composition, centered perspective, elevation view",
+      "negative_snippet": "angled, side view, bird eye, tilted",
+      "thumbnail": "front.jpg",
+      "sort_order": 10
+    },
+    {
+      "name": "Side View",
+      "prompt_snippet": "side view, lateral perspective, profile angle, 90 degree angle from front",
+      "negative_snippet": "front view, bird eye, close up",
+      "thumbnail": "side.jpg",
+      "sort_order": 11
+    },
+    {
+      "name": "Corner View",
+      "prompt_snippet": "corner view, 45 degree angle, two-point perspective, depth visible, diagonal composition",
+      "negative_snippet": "flat front view, side only, bird eye",
+      "thumbnail": "corner.jpg",
+      "sort_order": 12
+    },
+    {
+      "name": "Rear View",
+      "prompt_snippet": "rear view, looking from behind, back wall perspective, reverse angle",
+      "negative_snippet": "front view, close up, bird eye",
+      "thumbnail": "rear.jpg",
+      "sort_order": 13
+    },
+    {
+      "name": "Bird's Eye View",
+      "prompt_snippet": "bird's eye view, top down, overhead perspective, plan view, looking straight down",
+      "negative_snippet": "eye level, worm's eye, front view, side view",
+      "thumbnail": "birds_eye.jpg",
+      "sort_order": 20
+    },
+    {
+      "name": "High Angle",
+      "prompt_snippet": "high angle shot, looking down at 45 degrees, elevated viewpoint, overview perspective",
+      "negative_snippet": "low angle, eye level, worm's eye",
+      "thumbnail": "high_angle.jpg",
+      "sort_order": 21
+    },
+    {
+      "name": "Eye Level",
+      "prompt_snippet": "eye level view, standing height perspective, natural human viewpoint, 150cm height",
+      "negative_snippet": "bird eye, low angle, overhead, floor level",
+      "thumbnail": "eye_level.jpg",
+      "sort_order": 22
+    },
+    {
+      "name": "Low Angle",
+      "prompt_snippet": "low angle shot, looking up, floor level perspective, dramatic height emphasis, imposing view",
+      "negative_snippet": "high angle, bird eye, overhead, standard height",
+      "thumbnail": "low_angle.jpg",
+      "sort_order": 23
+    },
+    {
+      "name": "Worm's Eye View",
+      "prompt_snippet": "worm's eye view, looking straight up from floor, extreme low angle, ceiling emphasis, dramatic",
+      "negative_snippet": "bird eye, high angle, eye level, normal",
+      "thumbnail": "worms_eye.jpg",
+      "sort_order": 24
+    },
+    {
+      "name": "Through Doorway",
+      "prompt_snippet": "view through doorway, framed composition, looking into room from entrance, natural framing",
+      "negative_snippet": "open space, no frame, outdoor, close up",
+      "thumbnail": "doorway.jpg",
+      "sort_order": 30
+    },
+    {
+      "name": "Through Window",
+      "prompt_snippet": "view through window, interior seen from outside, window frame composition, inside-outside connection",
+      "negative_snippet": "interior only, no window, close up",
+      "thumbnail": "window.jpg",
+      "sort_order": 31
+    },
+    {
+      "name": "Panoramic",
+      "prompt_snippet": "panoramic view, ultra wide 180 degree, full space panorama, immersive perspective",
+      "negative_snippet": "narrow, cropped, close up, standard",
+      "thumbnail": "panoramic.jpg",
+      "sort_order": 32
+    },
+    {
+      "name": "Isometric",
+      "prompt_snippet": "isometric view, 3D technical illustration, axonometric projection, no perspective distortion, architectural diagram",
+      "negative_snippet": "perspective, vanishing point, photo, realistic",
+      "thumbnail": "isometric.jpg",
+      "sort_order": 33
+    },
+    {
+      "name": "Section Cut",
+      "prompt_snippet": "architectural section cut, cross section view, interior exposed, cutaway illustration, technical drawing",
+      "negative_snippet": "normal photo, exterior only, complete walls",
+      "thumbnail": "section.jpg",
+      "sort_order": 34
+    }
+  ]
+}

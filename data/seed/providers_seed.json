@@ -1,0 +1,64 @@
+{
+  "providers": [
+    {
+      "name": "SD WebUI Forge",
+      "key": "local",
+      "type": "local",
+      "base_url": "http://192.168.1.195:7860",
+      "description": "Yerel ağdaki SD WebUI Forge sunucusu",
+      "icon": "server",
+      "enabled": true,
+      "sort_order": 1
+    },
+    {
+      "name": "ComfyUI",
+      "key": "comfyui",
+      "type": "local",
+      "base_url": "http://localhost:8188",
+      "description": "ComfyUI — Node tabanlı, gelişmiş workflow desteği",
+      "icon": "comfyui",
+      "enabled": false,
+      "sort_order": 2
+    },
+    {
+      "name": "OpenAI",
+      "key": "openai",
+      "type": "cloud",
+      "base_url": "https://api.openai.com/v1",
+      "description": "OpenAI DALL-E API",
+      "icon": "openai",
+      "enabled": false,
+      "sort_order": 10
+    },
+    {
+      "name": "Stability AI",
+      "key": "stability",
+      "type": "cloud",
+      "base_url": "https://api.stability.ai/v2beta",
+      "description": "Stability AI API",
+      "icon": "stability",
+      "enabled": false,
+      "sort_order": 11
+    },
+    {
+      "name": "Google Gemini",
+      "key": "gemini",
+      "type": "cloud",
+      "base_url": "https://generativelanguage.googleapis.com/v1beta",
+      "description": "Google Gemini Imagen API",
+      "icon": "gemini",
+      "enabled": false,
+      "sort_order": 12
+    },
+    {
+      "name": "xAI Grok",
+      "key": "grok",
+      "type": "cloud",
+      "base_url": "https://api.x.ai/v1",
+      "description": "xAI Grok API",
+      "icon": "grok",
+      "enabled": false,
+      "sort_order": 13
+    }
+  ]
+}

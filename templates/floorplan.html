@@ -1,0 +1,754 @@
+{% extends "base.html" %}
+
+{% block title %}Floorplan - MekanAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/canvas.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="canvas-workspace">
+
+    <!-- ══════ Left Panel ══════ -->
+    <div class="canvas-left">
+      <div class="panel-sections-scroll">
+
+        <!-- Source Image -->
+        <div class="panel-section open">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Kaynak Plan</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <div class="source-preview" id="sourcePreview">
+                    {% if image %}
+                    <img src="/projects/{{ project.id }}/images/{{ image.filename }}" alt="{{ image.filename }}" id="sourceImage">
+                    {% else %}
+                    <div class="source-empty" onclick="document.getElementById('sourceInput').click()">
+                        <i class="fas fa-map"></i>
+                        <p>Kat planı yükleyin</p>
+                    </div>
+                    {% endif %}
+                    <input type="file" id="sourceInput" accept="image/*" style="display:none" onchange="loadSourceImage(this)">
+                </div>
+                {% if project %}
+                <div class="source-info">
+                    <span class="source-tag"><i class="fas fa-folder"></i> {{ project.name }}</span>
+                    <span class="source-tag">{{ image.filename }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Prompt -->
+        <div class="panel-section open">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Prompt</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <textarea id="promptInput" rows="4">top-down architectural floor plan render, realistic interior design, furnished rooms, modern furniture layout, hardwood flooring, clean lines, professional architectural visualization, 8k, detailed</textarea>
+            </div>
+        </div>
+
+        <!-- Negative Prompt -->
+        <div class="panel-section">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Negatif Prompt</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <textarea id="negativePrompt" rows="3">blurry, low quality, distorted, deformed, watermark, text, people, animals, outdoor, sketch lines, grid lines, measurements, dimensions, arrows</textarea>
+            </div>
+        </div>
+
+        <!-- Model -->
+        <div class="panel-section">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Model</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <label>Provider</label>
+                <select id="providerSelect" onchange="filterModels()">
+                    {% for p in providers %}
+                    <option value="{{ p.id }}" data-key="{{ p.key }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Model</label>
+                <select id="aiModel" onchange="applyModelDefaults()">
+                    {% for m in ai_models %}
+                    <option value="{{ m.key }}"
+                            data-provider="{{ m.provider_id }}"
+                            data-steps="{{ m.default_steps or '' }}"
+                            data-cfg="{{ m.default_cfg_scale or '' }}"
+                            data-sampler="{{ m.default_sampler or '' }}">{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="settings-row">
+                    <label>Steps</label>
+                    <div class="range-group">
+                        <input type="range" id="stepsRange" min="10" max="50" value="30" oninput="document.getElementById('stepsVal').textContent=this.value">
+                        <span id="stepsVal">30</span>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <label>CFG Scale</label>
+                    <div class="range-group">
+                        <input type="range" id="cfgRange" min="1" max="20" step="0.5" value="7" oninput="document.getElementById('cfgVal').textContent=this.value">
+                        <span id="cfgVal">7</span>
+                    </div>
+                </div>
+
+                <div class="settings-row">
+                    <label>Seed</label>
+                    <div class="seed-group">
+                        <input type="number" id="seedInput" value="-1" placeholder="-1 = rastgele">
+                        <button type="button" class="seed-toggle active" id="seedToggle" onclick="toggleSeedRandom()" title="Rastgele seed">
+                            <i class="fas fa-dice"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Oran (Scale) -->
+        <div class="panel-section open">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Oran</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <div class="settings-row">
+                    <label>Uzun Kenar</label>
+                    <select id="longEdgeSelect" onchange="updateDimensions()">
+                        <option value="576">576 px</option>
+                        <option value="768" selected>768 px</option>
+                        <option value="896">896 px</option>
+                        <option value="1024">1024 px</option>
+                        <option value="1088">1088 px</option>
+                        <option value="1120">1120 px</option>
+                        <option value="1152">1152 px</option>
+                        <option value="1280">1280 px</option>
+                        <option value="1344">1344 px</option>
+                        <option value="1536">1536 px</option>
+                    </select>
+                </div>
+                <div class="style-snippets" id="dimInfo">
+                    <div class="snippet-row">
+                        <label>Çıktı Boyutu</label>
+                        <p id="dimSize" class="snippet-text">— (görsel yükleyin)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ControlNet -->
+        <div class="panel-section open">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>ControlNet</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <div class="settings-row">
+                    <label>Preprocessor</label>
+                    <select id="cnModule">
+                        <option value="depth_midas" selected>Depth (Midas)</option>
+                        <option value="depth_zoe">Depth (Zoe)</option>
+                        <option value="canny">Canny Edge</option>
+                        <option value="lineart">Lineart</option>
+                        <option value="seg_ofade20k">Segmentation</option>
+                    </select>
+                </div>
+
+                <div class="settings-row">
+                    <label>Weight</label>
+                    <div class="range-group">
+                        <input type="range" id="cnWeight" min="0" max="2" step="0.05" value="1.0" oninput="document.getElementById('cnWeightVal').textContent=this.value">
+                        <span id="cnWeightVal">1.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+
+        <!-- Generate Button -->
+        <button class="btn-generate" id="btnGenerate" onclick="generateFloorplan()">
+            <i class="fas fa-magic"></i> Oluştur
+        </button>
+    </div>
+
+    <!-- ══════ Center - Result Area ══════ -->
+    <div class="canvas-center">
+        <div class="canvas-viewport" id="canvasViewport">
+            <div class="canvas-empty" id="canvasEmpty">
+                <i class="fas fa-map"></i>
+                <h3>Floorplan to Render</h3>
+                <p>Bir kat planı yükleyin, prompt yazın ve render edin</p>
+            </div>
+        </div>
+
+        <!-- Bottom Toolbar -->
+        <div class="canvas-toolbar">
+            <div class="toolbar-group">
+                <button class="toolbar-btn" title="Uzaklaştır" onclick="canvasZoom(-0.1)"><i class="fas fa-search-minus"></i></button>
+                <span class="zoom-level" id="zoomLevel">100%</span>
+                <button class="toolbar-btn" title="Yakınlaştır" onclick="canvasZoom(0.1)"><i class="fas fa-search-plus"></i></button>
+                <button class="toolbar-btn" title="Sığdır" onclick="canvasZoom(0)"><i class="fas fa-expand"></i></button>
+            </div>
+            <div class="toolbar-group toolbar-actions" id="toolbarActions" style="display:none;">
+                <button class="toolbar-btn" title="Görseli indir" onclick="downloadImage()"><i class="fas fa-download"></i></button>
+                <button class="toolbar-btn" title="Projeye kaydet" onclick="openProjectModal()"><i class="fas fa-folder-plus"></i></button>
+                <button class="toolbar-btn" title="Enhance'a gönder" onclick="sendToEnhance()"><i class="fas fa-expand-arrows-alt"></i></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════ Save to Project Modal ══════ -->
+<div class="modal-overlay" id="projectModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Projeye Kaydet</h3>
+            <button class="modal-close" onclick="closeProjectModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="project-list" id="projectList">
+                <div class="modal-loading"><i class="fas fa-spinner fa-spin"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Section Toggle ───────────────────────────────
+
+function toggleSection(header) {
+    const section = header.parentElement;
+    section.classList.toggle('open');
+}
+
+// ── LocalStorage Helpers ────────────────────────
+
+const LS_PREFIX = 'mekanai_';
+let _initializing = true;
+
+function savePref(key, value) {
+    if (_initializing) return;
+    localStorage.setItem(LS_PREFIX + key, value);
+}
+
+function loadPref(key) {
+    return localStorage.getItem(LS_PREFIX + key);
+}
+
+function restoreSelect(selectId, lsKey) {
+    const saved = loadPref(lsKey);
+    if (!saved) return false;
+    const el = document.getElementById(selectId);
+    const opt = el.querySelector('option[value="' + saved + '"]');
+    if (opt && !opt.disabled) {
+        el.value = saved;
+        return true;
+    }
+    return false;
+}
+
+// ── Provider → Model Filter ─────────────────────
+
+async function filterModels() {
+    const providerSelect = document.getElementById('providerSelect');
+    const providerId = providerSelect.value;
+    const providerKey = providerSelect.selectedOptions[0]?.dataset.key || '';
+    const modelSelect = document.getElementById('aiModel');
+
+    // Remove previous dynamic ComfyUI options
+    modelSelect.querySelectorAll('.dyn-comfyui').forEach(o => o.remove());
+
+    // ComfyUI: load available checkpoints from server
+    if (providerKey === 'comfyui') {
+        try {
+            const r = await fetch('/api/comfyui-checkpoints');
+            const data = await r.json();
+            if (data.checkpoints) {
+                const dbKeys = new Set();
+                modelSelect.querySelectorAll('option').forEach(opt => {
+                    if (opt.dataset.provider === providerId) dbKeys.add(opt.value);
+                });
+                data.checkpoints.forEach(cp => {
+                    const cpLower = cp.toLowerCase();
+                    let dup = false;
+                    dbKeys.forEach(k => { if (cpLower.includes(k.replace(/_/g, ''))) dup = true; });
+                    if (dup) return;
+                    const opt = document.createElement('option');
+                    opt.value = cp;
+                    opt.textContent = cp.replace(/\.[^.]+$/, '');
+                    opt.classList.add('dyn-comfyui');
+                    opt.dataset.provider = providerId;
+                    opt.dataset.steps = '20';
+                    opt.dataset.cfg = '7';
+                    opt.dataset.sampler = 'Euler';
+                    modelSelect.appendChild(opt);
+                });
+            }
+        } catch(e) { console.error('ComfyUI checkpoints:', e); }
+    }
+
+    // Standard filtering by provider
+    const options = modelSelect.querySelectorAll('option');
+    let firstVisible = null;
+    options.forEach(opt => {
+        const match = opt.dataset.provider === providerId;
+        opt.style.display = match ? '' : 'none';
+        opt.disabled = !match;
+        if (match && !firstVisible) firstVisible = opt;
+    });
+
+    if (firstVisible) {
+        modelSelect.value = firstVisible.value;
+        applyModelDefaults();
+    }
+    savePref('provider', providerId);
+    updateControlNetOptions();
+}
+
+function applyModelDefaults() {
+    const opt = document.getElementById('aiModel').selectedOptions[0];
+    if (!opt) return;
+    const steps = opt.dataset.steps;
+    const cfg = opt.dataset.cfg;
+    if (steps) {
+        document.getElementById('stepsRange').value = steps;
+        document.getElementById('stepsVal').textContent = steps;
+    }
+    if (cfg) {
+        document.getElementById('cfgRange').value = cfg;
+        document.getElementById('cfgVal').textContent = cfg;
+    }
+    savePref('model', opt.value);
+    updateControlNetOptions();
+}
+
+// ── ControlNet Options (dynamic for ComfyUI) ────
+
+const CN_DEFAULT_OPTIONS = [
+    { value: 'depth_midas', label: 'Depth (Midas)' },
+    { value: 'depth_zoe', label: 'Depth (Zoe)' },
+    { value: 'canny', label: 'Canny Edge' },
+    { value: 'lineart', label: 'Lineart' },
+    { value: 'seg_ofade20k', label: 'Segmentation' },
+];
+
+async function updateControlNetOptions() {
+    const cnSelect = document.getElementById('cnModule');
+    const savedVal = cnSelect.value;
+    const providerKey = document.getElementById('providerSelect').selectedOptions[0]?.dataset.key || '';
+
+    if (providerKey === 'comfyui') {
+        const checkpoint = document.getElementById('aiModel').value || '';
+        try {
+            const r = await fetch(`/api/comfyui-controlnet-options?checkpoint=${encodeURIComponent(checkpoint)}`);
+            const data = await r.json();
+            if (data.options && data.options.length > 0) {
+                cnSelect.innerHTML = data.options.map(o =>
+                    `<option value="${o.value}">${o.label}</option>`
+                ).join('');
+            } else {
+                cnSelect.innerHTML = '<option value="" disabled>Uyumlu CN modeli yok</option>';
+            }
+        } catch(e) {
+            console.error('CN options:', e);
+            _resetCnDefaults(cnSelect);
+        }
+    } else {
+        _resetCnDefaults(cnSelect);
+    }
+
+    // Restore previous selection if still available
+    const opt = cnSelect.querySelector(`option[value="${savedVal}"]`);
+    if (opt) cnSelect.value = savedVal;
+}
+
+function _resetCnDefaults(cnSelect) {
+    cnSelect.innerHTML = CN_DEFAULT_OPTIONS.map(o =>
+        `<option value="${o.value}">${o.label}</option>`
+    ).join('');
+}
+
+// ── Seed Toggle ─────────────────────────────────
+
+function toggleSeedRandom() {
+    const btn = document.getElementById('seedToggle');
+    const input = document.getElementById('seedInput');
+    const isRandom = btn.classList.toggle('active');
+
+    savePref('seed_random', isRandom ? 'true' : 'false');
+    if (isRandom) {
+        input.value = -1;
+        input.disabled = true;
+    } else {
+        input.disabled = false;
+    }
+}
+
+function initSeed() {
+    const isRandom = loadPref('seed_random') !== 'false';
+    const btn = document.getElementById('seedToggle');
+    const input = document.getElementById('seedInput');
+
+    if (isRandom) {
+        btn.classList.add('active');
+        input.value = -1;
+        input.disabled = true;
+    } else {
+        btn.classList.remove('active');
+        input.disabled = false;
+    }
+}
+
+// ── Dimension Calculation (scale by long edge) ──
+
+let sourceWidth = 0;
+let sourceHeight = 0;
+
+function updateDimensions() {
+    if (!sourceWidth || !sourceHeight) {
+        document.getElementById('dimSize').textContent = '— (görsel yükleyin)';
+        return;
+    }
+
+    const longEdge = parseInt(document.getElementById('longEdgeSelect').value);
+    let w, h;
+
+    if (sourceWidth >= sourceHeight) {
+        w = longEdge;
+        h = Math.round(sourceHeight * (longEdge / sourceWidth));
+    } else {
+        h = longEdge;
+        w = Math.round(sourceWidth * (longEdge / sourceHeight));
+    }
+
+    // Round to nearest 8 (SD requirement)
+    w = Math.round(w / 8) * 8;
+    h = Math.round(h / 8) * 8;
+
+    document.getElementById('dimSize').textContent = w + ' x ' + h + ' px';
+    savePref('fp_long_edge', longEdge);
+}
+
+function getOutputDimensions() {
+    const longEdge = parseInt(document.getElementById('longEdgeSelect').value);
+    let w, h;
+
+    if (!sourceWidth || !sourceHeight) {
+        return { width: longEdge, height: longEdge };
+    }
+
+    if (sourceWidth >= sourceHeight) {
+        w = longEdge;
+        h = Math.round(sourceHeight * (longEdge / sourceWidth));
+    } else {
+        h = longEdge;
+        w = Math.round(sourceWidth * (longEdge / sourceHeight));
+    }
+
+    w = Math.round(w / 8) * 8;
+    h = Math.round(h / 8) * 8;
+    return { width: w, height: h };
+}
+
+// ── Source Image Load ────────────────────────────
+
+let sourceBase64 = null;
+
+function loadSourceImage(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        document.getElementById('sourcePreview').innerHTML =
+            `<img src="${dataUrl}" alt="${file.name}" id="sourceImage">
+             <input type="file" id="sourceInput" accept="image/*" style="display:none" onchange="loadSourceImage(this)">`;
+        sourceBase64 = dataUrl.split(',')[1];
+
+        // Get natural dimensions
+        const img = new Image();
+        img.onload = () => {
+            sourceWidth = img.naturalWidth;
+            sourceHeight = img.naturalHeight;
+            updateDimensions();
+        };
+        img.src = dataUrl;
+    };
+    reader.readAsDataURL(file);
+}
+
+function initSourceDimensions() {
+    const img = document.querySelector('#sourcePreview img');
+    if (!img) return;
+    const setDims = () => {
+        sourceWidth = img.naturalWidth;
+        sourceHeight = img.naturalHeight;
+        updateDimensions();
+    };
+    if (img.complete && img.naturalWidth) {
+        setDims();
+    } else {
+        img.onload = setDims;
+    }
+}
+
+// ── Init ─────────────────────────────────────────
+
+restoreSelect('providerSelect', 'provider');
+filterModels();
+if (restoreSelect('aiModel', 'model')) {
+    applyModelDefaults();
+}
+restoreSelect('longEdgeSelect', 'fp_long_edge');
+initSeed();
+_initializing = false;
+
+// ── Canvas Zoom ──────────────────────────────────
+
+let currentZoom = 1.0;
+
+function canvasZoom(delta) {
+    const img = document.getElementById('canvasImage');
+    if (!img) return;
+
+    if (delta === 0) {
+        currentZoom = 1.0;
+    } else {
+        currentZoom = Math.max(0.1, Math.min(3.0, currentZoom + delta));
+    }
+
+    img.style.transform = `scale(${currentZoom})`;
+    document.getElementById('zoomLevel').textContent = Math.round(currentZoom * 100) + '%';
+}
+
+// ── Generate ─────────────────────────────────────
+
+const currentProjectId = {{ project.id if project else 'null' }};
+const currentImageId = {{ image.id if image else 'null' }};
+let lastImageBase64 = null;
+
+function generateFloorplan() {
+    const prompt = document.getElementById('promptInput').value;
+    if (!prompt) {
+        alert('Lütfen bir prompt girin');
+        return;
+    }
+
+    if (!currentImageId && !sourceBase64) {
+        alert('Lütfen bir kat planı yükleyin');
+        return;
+    }
+
+    const dims = getOutputDimensions();
+    const modelOpt = document.getElementById('aiModel').selectedOptions[0];
+    const providerOpt = document.getElementById('providerSelect').selectedOptions[0];
+    const btn = document.getElementById('btnGenerate');
+    const viewport = document.getElementById('canvasViewport');
+
+    const params = {
+        prompt: prompt,
+        provider_key: providerOpt?.dataset.key || '',
+        negative_prompt: document.getElementById('negativePrompt').value,
+        model: modelOpt.value,
+        sampler: modelOpt.dataset.sampler || 'DPM++ 2M Karras',
+        width: dims.width,
+        height: dims.height,
+        steps: parseInt(document.getElementById('stepsRange').value),
+        cfg_scale: parseFloat(document.getElementById('cfgRange').value),
+        seed: parseInt(document.getElementById('seedInput').value),
+        project_id: currentProjectId,
+        source_image_id: currentImageId,
+        controlnet_module: document.getElementById('cnModule').value,
+        controlnet_weight: parseFloat(document.getElementById('cnWeight').value),
+    };
+
+    if (!currentImageId && sourceBase64) {
+        params.source_image_base64 = sourceBase64;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Oluşturuluyor...';
+    const providerName = providerOpt?.textContent?.trim() || 'SD';
+    viewport.innerHTML = `<div class="canvas-loading"><i class="fas fa-spinner fa-spin"></i><p>ControlNet + ${providerName} ile oluşturuluyor...</p></div>`;
+
+    fetch('/api/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params)
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.status === 'success' && data.image_base64) {
+            lastImageBase64 = data.image_base64;
+
+            viewport.innerHTML = `<img src="data:image/png;base64,${data.image_base64}" alt="Generated" id="canvasImage">`;
+            currentZoom = 1.0;
+            document.getElementById('zoomLevel').textContent = '100%';
+            document.getElementById('toolbarActions').style.display = '';
+
+            if (data.seed && data.seed > 0) {
+                if (!document.getElementById('seedToggle').classList.contains('active')) {
+                    document.getElementById('seedInput').value = data.seed;
+                }
+            }
+            if (data.elapsed) {
+                console.log(`Oluşturma süresi: ${data.elapsed}s`);
+            }
+        } else {
+            viewport.innerHTML = `<div class="canvas-empty"><i class="fas fa-exclamation-triangle"></i><h3>Hata</h3><p>${data.message || 'Görsel oluşturulamadı'}</p></div>`;
+        }
+    })
+    .catch(err => {
+        viewport.innerHTML = '<div class="canvas-empty"><i class="fas fa-exclamation-triangle"></i><h3>Bağlantı Hatası</h3><p>Sunucuya bağlanılamadı: ' + (err.message || err) + '</p></div>';
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-magic"></i> Oluştur';
+    });
+}
+
+// ── Image Actions ───────────────────────────────
+
+function downloadImage() {
+    if (!lastImageBase64) return;
+    const a = document.createElement('a');
+    a.href = 'data:image/png;base64,' + lastImageBase64;
+    a.download = 'mekanai_floorplan_' + Date.now() + '.png';
+    a.click();
+}
+
+function sendToEnhance() {
+    if (!lastImageBase64) return;
+    sessionStorage.setItem('mekanai_enhance_image', lastImageBase64);
+    window.location.href = '/enhance';
+}
+
+function openProjectModal() {
+    if (!lastImageBase64) return;
+    const modal = document.getElementById('projectModal');
+    const list = document.getElementById('projectList');
+    list.innerHTML = '<div class="modal-loading"><i class="fas fa-spinner fa-spin"></i></div>';
+    modal.classList.add('open');
+
+    fetch('/api/projects')
+        .then(r => r.json())
+        .then(data => {
+            if (!data.projects || data.projects.length === 0) {
+                list.innerHTML = '<div class="project-empty">Henüz proje yok.<br>Önce Projects sayfasından proje oluşturun.</div>';
+                return;
+            }
+            list.innerHTML = data.projects.map(p => `
+                <div class="project-item" onclick="saveToProject(${p.id})">
+                    <i class="fas fa-folder"></i>
+                    <div class="project-item-info">
+                        <div class="project-item-name">${p.name}</div>
+                        <div class="project-item-meta">${p.description || ''}</div>
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(() => {
+            list.innerHTML = '<div class="project-empty">Projeler yüklenemedi.</div>';
+        });
+}
+
+function closeProjectModal() {
+    document.getElementById('projectModal').classList.remove('open');
+}
+
+function saveToProject(projectId) {
+    if (!lastImageBase64) return;
+    const list = document.getElementById('projectList');
+    list.innerHTML = '<div class="modal-loading"><i class="fas fa-spinner fa-spin"></i></div>';
+
+    fetch('/api/save-to-project', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            project_id: projectId,
+            image_base64: lastImageBase64,
+            settings: {
+                prompt: document.getElementById('promptInput').value,
+                negative_prompt: document.getElementById('negativePrompt').value,
+                source: 'floorplan',
+            }
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.status === 'success') {
+            list.innerHTML = '<div class="project-empty"><i class="fas fa-check" style="color:var(--primary-color);font-size:24px;"></i><br>Kaydedildi!</div>';
+            setTimeout(closeProjectModal, 1000);
+        } else {
+            list.innerHTML = '<div class="project-empty">Hata: ' + (data.message || 'Kaydedilemedi') + '</div>';
+        }
+    })
+    .catch(() => {
+        list.innerHTML = '<div class="project-empty">Bağlantı hatası.</div>';
+    });
+}
+
+// Close modal on overlay click
+document.getElementById('projectModal').addEventListener('click', function(e) {
+    if (e.target === this) closeProjectModal();
+});
+
+// ── SD WebUI Connection Check ───────────────────
+
+function checkSDStatus() {
+    fetch('/api/sd-status')
+        .then(r => r.json())
+        .then(data => {
+            const btn = document.getElementById('btnGenerate');
+            if (!data.connected) {
+                btn.title = 'SD WebUI bağlantısı yok';
+                btn.style.opacity = '0.6';
+            } else {
+                btn.title = 'Görsel oluştur';
+                btn.style.opacity = '1';
+            }
+        })
+        .catch(() => {});
+}
+
+checkSDStatus();
+
+// ── Load project image as base64 (from ?image=ID) ─
+(function() {
+    const img = document.querySelector('#sourcePreview img');
+    if (!img || sourceBase64) return;
+    const convert = () => {
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        c.getContext('2d').drawImage(img, 0, 0);
+        sourceBase64 = c.toDataURL('image/png').split(',')[1];
+        sourceWidth = img.naturalWidth;
+        sourceHeight = img.naturalHeight;
+        updateDimensions();
+    };
+    if (img.complete && img.naturalWidth) {
+        convert();
+    } else {
+        img.onload = convert;
+    }
+})();
+
+// Init source dimensions if image already loaded
+initSourceDimensions();
+</script>
+{% endblock %}

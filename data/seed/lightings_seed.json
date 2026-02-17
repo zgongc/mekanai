@@ -1,0 +1,172 @@
+{
+  "lightings": [
+    {
+      "name": "Customize",
+      "prompt_snippet": "",
+      "negative_snippet": "",
+      "thumbnail": "none.jpg",
+      "sort_order": 0
+    },
+    {
+      "name": "Natural Daylight",
+      "prompt_snippet": "natural daylight, sun streaming through windows, soft ambient light, realistic interior lighting",
+      "negative_snippet": "artificial, neon, dark, night",
+      "thumbnail": "natural.jpg",
+      "sort_order": 1
+    },
+    {
+      "name": "Golden Hour",
+      "prompt_snippet": "golden hour warm sunlight, long warm shadows, amber tones, sunset light through windows",
+      "negative_snippet": "cold, blue, night, artificial, harsh",
+      "thumbnail": "golden_hour.jpg",
+      "sort_order": 2
+    },
+    {
+      "name": "Key Lighting",
+      "prompt_snippet": "key lighting, single dominant light source, defined shadows, directional illumination",
+      "negative_snippet": "flat, even lighting, shadowless",
+      "thumbnail": "key.jpg",
+      "sort_order": 3
+    },
+    {
+      "name": "Low Key Lighting",
+      "prompt_snippet": "low key lighting, dark moody atmosphere, deep shadows, minimal illumination, dramatic contrast",
+      "negative_snippet": "bright, overexposed, flat, even lighting",
+      "thumbnail": "low_key.jpg",
+      "sort_order": 4
+    },
+    {
+      "name": "High Key Lighting",
+      "prompt_snippet": "high key lighting, bright and airy, minimal shadows, evenly lit, clean white light",
+      "negative_snippet": "dark, moody, dramatic shadows, underexposed",
+      "thumbnail": "high_key.jpg",
+      "sort_order": 5
+    },
+    {
+      "name": "Volumetric Lighting",
+      "prompt_snippet": "volumetric lighting, light rays, god rays through windows, dust particles in light beams, atmospheric",
+      "negative_snippet": "flat, clear air, no atmosphere, even lighting",
+      "thumbnail": "volumetric.jpg",
+      "sort_order": 6
+    },
+    {
+      "name": "Cold Light",
+      "prompt_snippet": "cold blue lighting, cool tones, overcast daylight, north-facing window light, crisp shadows",
+      "negative_snippet": "warm, golden, amber, orange tones",
+      "thumbnail": "cold.jpg",
+      "sort_order": 7
+    },
+    {
+      "name": "Warm Ambient",
+      "prompt_snippet": "warm ambient lighting, table lamps, warm white LEDs, cozy atmosphere, soft orange glow",
+      "negative_snippet": "cold, harsh, daylight, blue tones",
+      "thumbnail": "warm_ambient.jpg",
+      "sort_order": 8
+    },
+    {
+      "name": "Motivated Lighting",
+      "prompt_snippet": "motivated lighting, light from visible sources, practical lamps, realistic interior illumination",
+      "negative_snippet": "unexplained light, flat, studio",
+      "thumbnail": "motivated.jpg",
+      "sort_order": 9
+    },
+    {
+      "name": "Studio Lighting",
+      "prompt_snippet": "professional studio lighting, three-point setup, softbox, controlled shadows, commercial quality",
+      "negative_snippet": "natural, harsh, uncontrolled, dark",
+      "thumbnail": "studio.jpg",
+      "sort_order": 10
+    },
+    {
+      "name": "Translucency",
+      "prompt_snippet": "translucent materials, light passing through curtains, frosted glass, soft diffused backlight",
+      "negative_snippet": "opaque, dark, no backlight",
+      "thumbnail": "translucency.jpg",
+      "sort_order": 11
+    },
+    {
+      "name": "Luminescence",
+      "prompt_snippet": "luminescent glow, soft self-illuminating surfaces, ambient light emission, ethereal atmosphere",
+      "negative_snippet": "dark, harsh, direct light only",
+      "thumbnail": "luminescence.jpg",
+      "sort_order": 12
+    },
+    {
+      "name": "Glowing",
+      "prompt_snippet": "glowing light effect, bloom, soft radiance, warm light halos, dreamy illumination",
+      "negative_snippet": "sharp, dark, no glow, harsh contrast",
+      "thumbnail": "glowing.jpg",
+      "sort_order": 13
+    },
+    {
+      "name": "Moonlight",
+      "prompt_snippet": "moonlight through windows, cool blue silver light, nighttime, gentle shadows, serene atmosphere",
+      "negative_snippet": "daylight, warm, bright, artificial",
+      "thumbnail": "moonlight.jpg",
+      "sort_order": 14
+    },
+    {
+      "name": "Neon Accent",
+      "prompt_snippet": "neon accent lighting, LED strip lights, colored neon glow, modern RGB lighting, vibrant accents",
+      "negative_snippet": "natural, classic, traditional, no color",
+      "thumbnail": "neon.jpg",
+      "sort_order": 15
+    },
+    {
+      "name": "Candlelight",
+      "prompt_snippet": "candlelight, flickering warm glow, intimate atmosphere, multiple candles, romantic soft lighting",
+      "negative_snippet": "bright, daylight, cold, harsh, modern",
+      "thumbnail": "candlelight.jpg",
+      "sort_order": 16
+    },
+    {
+      "name": "Fireplace Glow",
+      "prompt_snippet": "fireplace glow, warm orange flickering light, cozy hearth, dancing shadows, intimate warmth",
+      "negative_snippet": "cold, daylight, blue, harsh",
+      "thumbnail": "fireplace.jpg",
+      "sort_order": 17
+    },
+    {
+      "name": "Silhouette Backlight",
+      "prompt_snippet": "silhouette backlighting, strong backlight from window, dark foreground, bright background, dramatic contrast",
+      "negative_snippet": "front lit, flat, even, no contrast",
+      "thumbnail": "silhouette.jpg",
+      "sort_order": 18
+    },
+    {
+      "name": "Indirect / Cove",
+      "prompt_snippet": "indirect cove lighting, hidden LED strips, ceiling cove glow, soft uplight, no visible light source",
+      "negative_snippet": "direct, harsh, spotlight, visible bulb",
+      "thumbnail": "cove.jpg",
+      "sort_order": 19
+    },
+    {
+      "name": "Pendant & Chandelier",
+      "prompt_snippet": "pendant light, chandelier illumination, decorative hanging fixture, focused downlight, elegant lighting",
+      "negative_snippet": "no fixture, hidden light, flat ceiling",
+      "thumbnail": "pendant.jpg",
+      "sort_order": 20
+    },
+    {
+      "name": "Spotlight / Track",
+      "prompt_snippet": "spotlight track lighting, focused beam, accent lighting on objects, gallery style, directional spots",
+      "negative_snippet": "ambient, diffused, flat, even",
+      "thumbnail": "spotlight.jpg",
+      "sort_order": 21
+    },
+    {
+      "name": "Morning Light",
+      "prompt_snippet": "early morning light, soft dawn, gentle eastern sun, fresh clean illumination, new day atmosphere",
+      "negative_snippet": "sunset, night, dark, warm golden",
+      "thumbnail": "morning.jpg",
+      "sort_order": 22
+    },
+    {
+      "name": "Overcast Soft",
+      "prompt_snippet": "overcast soft daylight, diffused cloudy sky light, no harsh shadows, even soft illumination",
+      "negative_snippet": "direct sun, harsh shadows, dark, night",
+      "thumbnail": "overcast.jpg",
+      "sort_order": 23
+    }
+  ]
+}

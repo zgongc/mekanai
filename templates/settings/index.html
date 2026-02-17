@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Ayarlar - MekanAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="settings-layout">
+    <!-- Sol Tab Menu -->
+    <nav class="settings-nav">
+        <a class="settings-tab active" data-tab="general">
+            <i class="fas fa-sliders"></i><span>Genel</span>
+        </a>
+        <div class="settings-nav-divider"></div>
+        <a class="settings-tab" data-tab="styles">
+            <i class="fas fa-palette"></i><span>Stiller</span>
+        </a>
+        <a class="settings-tab" data-tab="scenes">
+            <i class="fas fa-image"></i><span>Sahneler</span>
+        </a>
+        <a class="settings-tab" data-tab="perspectives">
+            <i class="fas fa-camera"></i><span>Perspektifler</span>
+        </a>
+        <a class="settings-tab" data-tab="lightings">
+            <i class="fas fa-lightbulb"></i><span>Işıklandırma</span>
+        </a>
+        <a class="settings-tab" data-tab="ratios">
+            <i class="fas fa-crop-simple"></i><span>Oranlar</span>
+        </a>
+        <div class="settings-nav-divider"></div>
+        <a class="settings-tab" data-tab="ai_providers">
+            <i class="fas fa-server"></i><span>Providerlar</span>
+        </a>
+        <a class="settings-tab" data-tab="ai_models">
+            <i class="fas fa-robot"></i><span>AI Modeller</span>
+        </a>
+        <a class="settings-tab" data-tab="modes">
+            <i class="fas fa-wand-magic-sparkles"></i><span>Modlar</span>
+        </a>
+    </nav>
+
+    <!-- Sag Icerik -->
+    <div class="settings-content">
+        <!-- Genel Tab (default) -->
+        <div class="settings-panel active" id="panel-general">
+            <div class="settings-header">
+                <h2>Genel Ayarlar</h2>
+            </div>
+            <div class="settings-body">
+                <div class="setting-group">
+                    <h3>Görünüm</h3>
+                    <div class="setting-row">
+                        <label>Tema</label>
+                        <select id="themeSelect" onchange="setTheme(this.value)">
+                            <option value="dark" {{ 'selected' if theme == 'dark' }}>Dark</option>
+                            <option value="light" {{ 'selected' if theme == 'light' }}>Light</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>SD WebUI Bağlantısı</h3>
+                    <div class="setting-row">
+                        <label>Durum</label>
+                        <span id="sdStatus" class="status-badge loading">Kontrol ediliyor...</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Modeller</label>
+                        <span id="sdModels" class="text-muted">-</span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>Veritabanı</h3>
+                    <div class="setting-row">
+                        <label>Stiller</label>
+                        <span id="countStyles">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Sahneler</label>
+                        <span id="countScenes">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Perspektifler</label>
+                        <span id="countPerspectives">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Işıklandırma</label>
+                        <span id="countLightings">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Oranlar</label>
+                        <span id="countRatios">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>AI Providerlar</label>
+                        <span id="countProviders">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>AI Modeller</label>
+                        <span id="countModels">-</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Modlar</label>
+                        <span id="countModes">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic table panels rendered by JS -->
+        <div class="settings-panel" id="panel-table">
+            <div class="settings-header">
+                <h2 id="tableTitle">-</h2>
+                <button class="btn-primary btn-sm" id="btnAdd">
+                    <i class="fas fa-plus"></i> Yeni Ekle
+                </button>
+            </div>
+            <div class="settings-body">
+                <div class="table-container">
+                    <table class="data-table" id="dataTable">
+                        <thead><tr id="tableHead"></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                    <div class="table-empty" id="tableEmpty" style="display:none;">
+                        Kayıt bulunamadı
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit/Create Form (overlay) -->
+        <div class="form-overlay" id="formOverlay" style="display:none;">
+            <div class="form-panel">
+                <div class="form-header">
+                    <h3 id="formTitle">Yeni Kayıt</h3>
+                    <button class="btn-icon" id="btnFormClose"><i class="fas fa-xmark"></i></button>
+                </div>
+                <div class="form-body" id="formBody"></div>
+                <div class="form-footer">
+                    <button class="btn-secondary" id="btnFormCancel">İptal</button>
+                    <button class="btn-primary" id="btnFormSave">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}

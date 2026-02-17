@@ -1,0 +1,446 @@
+/* ══════════════════════════════════════════
+   Settings Page
+   ══════════════════════════════════════════ */
+
+.settings-layout {
+    display: flex;
+    height: 100%;
+    gap: 0;
+}
+
+/* ── Sol Tab Menu ────────────────────────── */
+
+.settings-nav {
+    width: 180px;
+    min-width: 180px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+}
+
+.settings-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.settings-tab i {
+    width: 18px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.settings-tab:hover {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.settings-tab.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.settings-nav-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 8px 6px;
+}
+
+/* ── Sağ İçerik ──────────────────────────── */
+
+.settings-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.settings-panel {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+}
+
+.settings-panel.active {
+    display: flex;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.settings-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.settings-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+}
+
+/* ── Genel Ayarlar ──────────────────────── */
+
+.setting-group {
+    margin-bottom: 28px;
+}
+
+.setting-group h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.setting-row label {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.setting-row select {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.online {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+}
+
+.status-badge.offline {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+}
+
+.status-badge.loading {
+    background: rgba(250, 204, 21, 0.15);
+    color: #facc15;
+}
+
+.text-muted {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* ── Data Table ──────────────────────────── */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    background: var(--bg-primary);
+}
+
+.data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data-table tbody tr:hover {
+    background: var(--hover-bg);
+}
+
+.data-table .col-id {
+    width: 50px;
+    color: var(--text-secondary);
+}
+
+.data-table .col-actions {
+    width: 80px;
+    text-align: right;
+}
+
+.data-table .col-thumb {
+    width: 40px;
+}
+
+.data-table .col-thumb img {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.row-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.row-actions button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 5px 7px;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: all 0.15s;
+}
+
+.row-actions button:hover {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.row-actions button.btn-delete:hover {
+    color: #f87171;
+}
+
+.table-empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Toggle */
+.toggle-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.toggle-badge.on {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+}
+
+.toggle-badge.off {
+    background: rgba(161, 161, 170, 0.15);
+    color: var(--text-secondary);
+}
+
+/* ── Form Overlay ────────────────────────── */
+
+.form-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.form-panel {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 520px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.form-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-field textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-field input[type="number"] {
+    width: 120px;
+}
+
+.form-field .toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.form-field .toggle-switch input[type="checkbox"] {
+    width: 36px;
+    height: 20px;
+    appearance: none;
+    background: var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+}
+
+.form-field .toggle-switch input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+}
+
+.form-field .toggle-switch input[type="checkbox"]:checked {
+    background: var(--primary-color);
+}
+
+.form-field .toggle-switch input[type="checkbox"]:checked::after {
+    transform: translateX(16px);
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ── Buttons ─────────────────────────────── */
+
+.btn-sm {
+    padding: 7px 14px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+.btn-secondary {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.btn-secondary:hover {
+    background: var(--hover-bg);
+}
+
+/* ── content-area override ───────────────── */
+
+.content-area:has(.settings-layout) {
+    padding: 0 !important;
+    overflow: hidden !important;
+}

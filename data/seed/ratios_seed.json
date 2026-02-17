@@ -1,0 +1,21 @@
+{
+  "ratios": [
+    {"name": "1:1",   "width": 1024, "height": 1024, "icon": "square",    "sort_order": 1},
+    {"name": "4:5",   "width": 896,  "height": 1120, "icon": "portrait",  "sort_order": 2},
+    {"name": "5:4",   "width": 1120, "height": 896,  "icon": "landscape", "sort_order": 3},
+    {"name": "3:4",   "width": 768,  "height": 1024, "icon": "portrait",  "sort_order": 4},
+    {"name": "4:3",   "width": 1024, "height": 768,  "icon": "landscape", "sort_order": 5},
+    {"name": "2:3",   "width": 768,  "height": 1152, "icon": "portrait",  "sort_order": 6},
+    {"name": "3:2",   "width": 1152, "height": 768,  "icon": "landscape", "sort_order": 7},
+    {"name": "5:7",   "width": 768,  "height": 1088, "icon": "portrait",  "sort_order": 8},
+    {"name": "7:5",   "width": 1088, "height": 768,  "icon": "landscape", "sort_order": 9},
+    {"name": "9:16",  "width": 576,  "height": 1024, "icon": "portrait",  "sort_order": 10},
+    {"name": "16:9",  "width": 1344, "height": 768,  "icon": "landscape", "sort_order": 11},
+    {"name": "9:21",  "width": 448,  "height": 1024, "icon": "portrait",  "sort_order": 12},
+    {"name": "21:9",  "width": 1536, "height": 640,  "icon": "landscape", "sort_order": 13}
+  ],
+  "allow_manual": true,
+  "manual_min": 256,
+  "manual_max": 2048,
+  "manual_step": 64
+}

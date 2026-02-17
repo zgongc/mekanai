@@ -1,0 +1,295 @@
+{
+  "categories": [
+    {
+      "key": "interior",
+      "name": "Interior",
+      "subcategories": [
+        {"key": "interior_scene", "name": "Interior Scene"},
+        {"key": "scene_elements", "name": "Scene Elements"},
+        {"key": "interior_style", "name": "Interior Style"},
+        {"key": "environment", "name": "Environment"}
+      ]
+    },
+    {
+      "key": "architecture",
+      "name": "Architecture",
+      "subcategories": [
+        {"key": "exterior", "name": "Exterior"},
+        {"key": "facade", "name": "Facade"},
+        {"key": "structure", "name": "Structure"}
+      ]
+    },
+    {
+      "key": "commercial",
+      "name": "Commercial Space",
+      "subcategories": [
+        {"key": "retail", "name": "Retail"},
+        {"key": "hospitality", "name": "Hospitality"},
+        {"key": "office", "name": "Office"}
+      ]
+    },
+    {
+      "key": "landscape",
+      "name": "Landscape Design",
+      "subcategories": [
+        {"key": "garden", "name": "Garden"},
+        {"key": "outdoor", "name": "Outdoor Living"},
+        {"key": "pool", "name": "Pool & Water"}
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Living Room",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "modern living room interior, sofa, coffee table, TV wall, carpet, decorative cushions",
+      "negative_snippet": "outdoor, exterior, empty room, unfinished",
+      "thumbnail": "living_room.jpg",
+      "sort_order": 1
+    },
+    {
+      "name": "Kitchen",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "modern kitchen interior, kitchen island, cabinets, countertop, appliances, backsplash",
+      "negative_snippet": "outdoor, empty, unfinished, dirty",
+      "thumbnail": "kitchen.jpg",
+      "sort_order": 2
+    },
+    {
+      "name": "Bed Room",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "bedroom interior, bed with headboard, nightstands, wardrobe, soft lighting, cozy atmosphere",
+      "negative_snippet": "outdoor, kitchen, bathroom, empty",
+      "thumbnail": "bedroom.jpg",
+      "sort_order": 3
+    },
+    {
+      "name": "Bath Room",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "modern bathroom interior, vanity, mirror, shower, bathtub, tiles, clean design",
+      "negative_snippet": "outdoor, kitchen, dirty, old",
+      "thumbnail": "bathroom.jpg",
+      "sort_order": 4
+    },
+    {
+      "name": "Dining Room",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "dining room interior, dining table, chairs, pendant light, sideboard, table setting",
+      "negative_snippet": "outdoor, empty, unfinished",
+      "thumbnail": "dining_room.jpg",
+      "sort_order": 5
+    },
+    {
+      "name": "Home Office",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "home office interior, desk, ergonomic chair, bookshelves, monitor, organized workspace",
+      "negative_snippet": "outdoor, messy, industrial, warehouse",
+      "thumbnail": "home_office.jpg",
+      "sort_order": 6
+    },
+    {
+      "name": "Closet",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "walk-in closet interior, organized shelving, hanging clothes, shoe storage, dressing mirror, LED lighting",
+      "negative_snippet": "outdoor, messy, cluttered, old",
+      "thumbnail": "closet.jpg",
+      "sort_order": 7
+    },
+    {
+      "name": "Basement",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "finished basement interior, entertainment area, low ceiling, recessed lighting, comfortable seating",
+      "negative_snippet": "unfinished, raw concrete, dirty, abandoned",
+      "thumbnail": "basement.jpg",
+      "sort_order": 8
+    },
+    {
+      "name": "Kids Room",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "children bedroom interior, playful colors, bunk bed, toy storage, study desk, fun wallpaper",
+      "negative_snippet": "adult, dark, minimal, industrial",
+      "thumbnail": "kids_room.jpg",
+      "sort_order": 9
+    },
+    {
+      "name": "Hallway & Entrance",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "entrance hallway interior, console table, mirror, coat rack, shoe cabinet, welcoming atmosphere",
+      "negative_snippet": "outdoor, large room, empty",
+      "thumbnail": "hallway.jpg",
+      "sort_order": 10
+    },
+    {
+      "name": "Laundry Room",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "modern laundry room, washing machine, dryer, folding counter, storage cabinets, clean organized",
+      "negative_snippet": "dirty, old, outdoor",
+      "thumbnail": "laundry.jpg",
+      "sort_order": 11
+    },
+    {
+      "name": "Balcony & Terrace",
+      "category": "interior",
+      "subcategory": "interior_scene",
+      "prompt_snippet": "balcony terrace design, outdoor furniture, plants, railing, city view, cozy outdoor living space",
+      "negative_snippet": "indoor, closed, dark, empty",
+      "thumbnail": "balcony.jpg",
+      "sort_order": 12
+    },
+    {
+      "name": "Fireplace",
+      "category": "interior",
+      "subcategory": "scene_elements",
+      "prompt_snippet": "fireplace wall design, mantel, stone or marble surround, fire burning, cozy seating area",
+      "negative_snippet": "outdoor, cold, empty wall",
+      "thumbnail": "fireplace.jpg",
+      "sort_order": 20
+    },
+    {
+      "name": "Staircase",
+      "category": "interior",
+      "subcategory": "scene_elements",
+      "prompt_snippet": "interior staircase design, handrail, steps, under-stair storage, architectural feature, lighting",
+      "negative_snippet": "outdoor, elevator, flat",
+      "thumbnail": "staircase.jpg",
+      "sort_order": 21
+    },
+    {
+      "name": "TV Wall",
+      "category": "interior",
+      "subcategory": "scene_elements",
+      "prompt_snippet": "TV wall unit design, built-in shelving, media console, ambient backlighting, cable management",
+      "negative_snippet": "empty wall, outdoor, old CRT TV",
+      "thumbnail": "tv_wall.jpg",
+      "sort_order": 22
+    },
+    {
+      "name": "Bookshelf Wall",
+      "category": "interior",
+      "subcategory": "scene_elements",
+      "prompt_snippet": "floor to ceiling bookshelf wall, library design, organized books, reading nook, ladder",
+      "negative_snippet": "empty, outdoor, messy",
+      "thumbnail": "bookshelf.jpg",
+      "sort_order": 23
+    },
+    {
+      "name": "Ceiling Design",
+      "category": "interior",
+      "subcategory": "scene_elements",
+      "prompt_snippet": "decorative ceiling design, coffered ceiling, indirect lighting, crown molding, architectural detail",
+      "negative_snippet": "flat plain ceiling, outdoor, floor",
+      "thumbnail": "ceiling.jpg",
+      "sort_order": 24
+    },
+    {
+      "name": "Villa Exterior",
+      "category": "architecture",
+      "subcategory": "exterior",
+      "prompt_snippet": "modern villa exterior, contemporary architecture, large windows, flat roof, landscaped garden, driveway",
+      "negative_snippet": "interior, old, damaged, construction site",
+      "thumbnail": "villa.jpg",
+      "sort_order": 30
+    },
+    {
+      "name": "Apartment Building",
+      "category": "architecture",
+      "subcategory": "exterior",
+      "prompt_snippet": "modern apartment building exterior, balconies, glass facade, urban architecture, landscaping",
+      "negative_snippet": "interior, old, damaged, rural",
+      "thumbnail": "apartment.jpg",
+      "sort_order": 31
+    },
+    {
+      "name": "Storefront",
+      "category": "architecture",
+      "subcategory": "facade",
+      "prompt_snippet": "modern storefront design, large display windows, signage, entrance, street level commercial",
+      "negative_snippet": "interior, residential, abandoned",
+      "thumbnail": "storefront.jpg",
+      "sort_order": 32
+    },
+    {
+      "name": "Restaurant",
+      "category": "commercial",
+      "subcategory": "hospitality",
+      "prompt_snippet": "restaurant interior design, dining tables, bar area, ambient lighting, decorative elements, inviting atmosphere",
+      "negative_snippet": "residential, outdoor, fast food, empty",
+      "thumbnail": "restaurant.jpg",
+      "sort_order": 40
+    },
+    {
+      "name": "Cafe",
+      "category": "commercial",
+      "subcategory": "hospitality",
+      "prompt_snippet": "modern cafe interior, coffee bar, pastry display, cozy seating, industrial chic, plants",
+      "negative_snippet": "residential, formal dining, outdoor",
+      "thumbnail": "cafe.jpg",
+      "sort_order": 41
+    },
+    {
+      "name": "Hotel Lobby",
+      "category": "commercial",
+      "subcategory": "hospitality",
+      "prompt_snippet": "luxury hotel lobby interior, reception desk, grand chandelier, marble floors, lounge seating, impressive entrance",
+      "negative_snippet": "residential, small, cheap, old",
+      "thumbnail": "hotel_lobby.jpg",
+      "sort_order": 42
+    },
+    {
+      "name": "Retail Store",
+      "category": "commercial",
+      "subcategory": "retail",
+      "prompt_snippet": "retail store interior, product displays, shelving, checkout counter, spotlighting, branded environment",
+      "negative_snippet": "residential, warehouse, empty, outdoor",
+      "thumbnail": "retail.jpg",
+      "sort_order": 43
+    },
+    {
+      "name": "Corporate Office",
+      "category": "commercial",
+      "subcategory": "office",
+      "prompt_snippet": "modern corporate office interior, open plan, workstations, meeting room, glass partitions, professional",
+      "negative_snippet": "residential, home office, outdoor, old",
+      "thumbnail": "office.jpg",
+      "sort_order": 44
+    },
+    {
+      "name": "Garden Design",
+      "category": "landscape",
+      "subcategory": "garden",
+      "prompt_snippet": "landscaped garden design, pathways, flower beds, trees, lawn, outdoor lighting, stone features",
+      "negative_snippet": "interior, wild, overgrown, abandoned",
+      "thumbnail": "garden.jpg",
+      "sort_order": 50
+    },
+    {
+      "name": "Pool Area",
+      "category": "landscape",
+      "subcategory": "pool",
+      "prompt_snippet": "swimming pool design, pool deck, loungers, landscaping, water features, infinity edge, outdoor luxury",
+      "negative_snippet": "interior, empty, dirty, abandoned",
+      "thumbnail": "pool.jpg",
+      "sort_order": 51
+    },
+    {
+      "name": "Outdoor Lounge",
+      "category": "landscape",
+      "subcategory": "outdoor",
+      "prompt_snippet": "outdoor lounge area, patio furniture, pergola, fire pit, string lights, comfortable cushions, garden view",
+      "negative_snippet": "interior, closed, dark, empty",
+      "thumbnail": "outdoor_lounge.jpg",
+      "sort_order": 52
+    }
+  ]
+}

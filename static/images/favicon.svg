@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#f97316"/>
+  <!-- Drafting compass icon -->
+  <g transform="translate(16,16)" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Pivot point -->
+    <circle cx="0" cy="-8" r="1.5" fill="white" stroke="none"/>
+    <!-- Left leg -->
+    <line x1="-1" y1="-6" x2="-6" y2="10"/>
+    <!-- Right leg -->
+    <line x1="1" y1="-6" x2="6" y2="10"/>
+    <!-- Arc (drawn by compass) -->
+    <path d="M-5 6 A 7 7 0 0 1 5 6" stroke-width="1.2"/>
+    <!-- Cross bar / hinge -->
+    <line x1="-2.5" y1="0" x2="2.5" y2="0" stroke-width="1.3"/>
+  </g>
+</svg>

@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+
+{% block title %}Enhance - MekanAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/canvas.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="canvas-workspace">
+
+    <!-- ══════ Left Panel ══════ -->
+    <div class="canvas-left">
+      <div class="panel-sections-scroll">
+
+        <!-- Source Image -->
+        <div class="panel-section open">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Kaynak Görsel</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <div class="source-preview" id="sourcePreview">
+                    {% if image %}
+                    <img src="/projects/{{ project.id }}/images/{{ image.filename }}" alt="{{ image.filename }}" id="sourceImage">
+                    {% else %}
+                    <div class="source-empty" onclick="document.getElementById('sourceInput').click()">
+                        <i class="fas fa-image"></i>
+                        <p>Görsel seçin veya sürükleyin</p>
+                    </div>
+                    {% endif %}
+                    <input type="file" id="sourceInput" accept="image/*" style="display:none" onchange="loadSourceImage(this)">
+                </div>
+                {% if project %}
+                <div class="source-info">
+                    <span class="source-tag"><i class="fas fa-folder"></i> {{ project.name }}</span>
+                    <span class="source-tag">{{ image.filename }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Model -->
+        <div class="panel-section">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Model</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <label>Provider</label>
+                <select id="providerSelect" onchange="onProviderChange()">
+                    {% for p in providers %}
+                    <option value="{{ p.id }}" data-key="{{ p.key }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+        </div>
+
+        <!-- Upscaler Model -->
+        <div class="panel-section open">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Upscaler</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <label>Model</label>
+                <select id="upscalerSelect">
+                    <option value="" class="dyn-upscaler">Yükleniyor...</option>
+                    {% for m in upscale_models %}
+                    <option value="{{ m.key }}" data-provider="{{ m.provider_id }}" class="db-upscaler" style="display:none" disabled>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="settings-row" id="scaleRow">
+                    <label>Ölçek</label>
+                    <div class="range-group">
+                        <input type="range" id="scaleRange" min="1" max="8" step="1" value="2" oninput="updateScaleLabel()">
+                        <span id="scaleVal">2x</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upscaler 2 (Optional Blend) -->
+        <div class="panel-section" id="upscaler2Section">
+            <div class="panel-section-header" onclick="toggleSection(this)">
+                <span>Upscaler 2</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="panel-section-body">
+                <label>Model</label>
+                <select id="upscaler2Select">
+                    <option value="">Yok</option>
+                    {% for m in upscale_models %}
+                    <option value="{{ m.key }}" data-provider="{{ m.provider_id }}" class="db-upscaler" style="display:none" disabled>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="settings-row">
+                    <label>Blend</label>
+                    <div class="range-group">
+                        <input type="range" id="blendRange" min="0" max="1" step="0.05" value="0" oninput="document.getElementById('blendVal').textContent=this.value">
+                        <span id="blendVal">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+
+        <!-- Enhance Button -->
+        <button class="btn-generate" id="btnEnhance" onclick="enhanceImage()">
+            <i class="fas fa-expand-arrows-alt"></i> Enhance
+        </button>
+    </div>
+
+    <!-- ══════ Center - Result Area ══════ -->
+    <div class="canvas-center">
+        <div class="canvas-viewport" id="canvasViewport">
+            <div class="canvas-empty" id="canvasEmpty">
+                <i class="fas fa-expand-arrows-alt"></i>
+                <h3>Image Enhancer</h3>
+                <p>Bir görsel yükleyin ve upscale edin</p>
+            </div>
+        </div>
+
+        <!-- Bottom Toolbar -->
+        <div class="canvas-toolbar">
+            <div class="toolbar-group">
+                <button class="toolbar-btn" title="Uzaklaştır" onclick="canvasZoom(-0.1)"><i class="fas fa-search-minus"></i></button>
+                <span class="zoom-level" id="zoomLevel">100%</span>
+                <button class="toolbar-btn" title="Yakınlaştır" onclick="canvasZoom(0.1)"><i class="fas fa-search-plus"></i></button>
+                <button class="toolbar-btn" title="Sığdır" onclick="canvasZoom(0)"><i class="fas fa-expand"></i></button>
+            </div>
+            <div class="toolbar-group toolbar-actions" id="toolbarActions" style="display:none;">
+                <button class="toolbar-btn" title="Görseli indir" onclick="downloadImage()"><i class="fas fa-download"></i></button>
+                <button class="toolbar-btn" title="Projeye kaydet" onclick="openProjectModal()"><i class="fas fa-folder-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════ Save to Project Modal ══════ -->
+<div class="modal-overlay" id="projectModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Projeye Kaydet</h3>
+            <button class="modal-close" onclick="closeProjectModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="project-list" id="projectList">
+                <div class="modal-loading"><i class="fas fa-spinner fa-spin"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Section Toggle ───────────────────────────────
+
+function toggleSection(header) {
+    const section = header.parentElement;
+    section.classList.toggle('open');
+}
+
+// ── Canvas Zoom ──────────────────────────────────
+
+let currentZoom = 1.0;
+
+function canvasZoom(delta) {
+    const img = document.getElementById('canvasImage');
+    if (!img) return;
+
+    if (delta === 0) {
+        currentZoom = 1.0;
+    } else {
+        currentZoom = Math.max(0.1, Math.min(3.0, currentZoom + delta));
+    }
+
+    img.style.transform = `scale(${currentZoom})`;
+    document.getElementById('zoomLevel').textContent = Math.round(currentZoom * 100) + '%';
+}
+
+// ── Scale Label ─────────────────────────────────
+
+function updateScaleLabel() {
+    document.getElementById('scaleVal').textContent = document.getElementById('scaleRange').value + 'x';
+}
+
+// ── Source Image Load ────────────────────────────
+
+let sourceBase64 = null;
+
+function loadSourceImage(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        document.getElementById('sourcePreview').innerHTML =
+            `<img src="${dataUrl}" alt="${file.name}" id="sourceImage">
+             <input type="file" id="sourceInput" accept="image/*" style="display:none" onchange="loadSourceImage(this)">`;
+        sourceBase64 = dataUrl.split(',')[1];
+    };
+    reader.readAsDataURL(file);
+}
+
+// ── Provider Change → Filter Models + Upscalers ──
+
+function getProviderKey() {
+    const opt = document.getElementById('providerSelect').selectedOptions[0];
+    return opt ? (opt.dataset.key || '') : '';
+}
+
+function onProviderChange() {
+    const providerId = document.getElementById('providerSelect').value;
+    const providerKey = getProviderKey();
+    const isLocal = providerKey === 'local';
+
+    // Show/hide controls per provider
+    const isLocalOrComfy = isLocal || providerKey === 'comfyui';
+    document.getElementById('scaleRow').style.display = isLocalOrComfy ? '' : 'none';
+    document.getElementById('upscaler2Section').style.display = isLocal ? '' : 'none';
+
+    // Load upscalers based on provider type
+    if (isLocal) {
+        loadLocalUpscalers();
+    } else if (providerKey === 'comfyui') {
+        loadComfyUIUpscalers();
+    } else {
+        loadCloudUpscalers(providerId);
+    }
+}
+
+function filterByProvider(selectId, providerId) {
+    const sel = document.getElementById(selectId);
+    let firstVisible = null;
+    sel.querySelectorAll('option').forEach(opt => {
+        const match = opt.dataset.provider === providerId;
+        opt.style.display = match ? '' : 'none';
+        opt.disabled = !match;
+        if (match && !firstVisible) firstVisible = opt;
+    });
+    if (firstVisible) sel.value = firstVisible.value;
+}
+
+function clearDynamic(sel) {
+    sel.querySelectorAll('.dyn-upscaler').forEach(o => o.remove());
+}
+
+function addDynamic(sel, html) {
+    const tmp = document.createElement('template');
+    tmp.innerHTML = html;
+    sel.append(...tmp.content.children);
+}
+
+function loadLocalUpscalers() {
+    const sel1 = document.getElementById('upscalerSelect');
+    const sel2 = document.getElementById('upscaler2Select');
+
+    // Hide DB options
+    sel1.querySelectorAll('.db-upscaler').forEach(o => { o.style.display = 'none'; o.disabled = true; });
+    sel2.querySelectorAll('.db-upscaler').forEach(o => { o.style.display = 'none'; o.disabled = true; });
+
+    // Remove previously added dynamic options
+    clearDynamic(sel1);
+    clearDynamic(sel2);
+
+    // Show loading placeholder
+    addDynamic(sel1, '<option value="" class="dyn-upscaler">Yükleniyor...</option>');
+
+    // Fetch from SD WebUI
+    fetch('/api/upscalers')
+        .then(r => r.json())
+        .then(data => {
+            clearDynamic(sel1);
+            clearDynamic(sel2);
+            if (!data.upscalers || data.upscalers.length === 0) {
+                addDynamic(sel1, '<option value="" class="dyn-upscaler">Upscaler bulunamadı</option>');
+                return;
+            }
+            const opts = data.upscalers.map(u =>
+                `<option value="${u}" class="dyn-upscaler">${u}</option>`
+            ).join('');
+            addDynamic(sel1, opts);
+            addDynamic(sel2, '<option value="" class="dyn-upscaler">Yok</option>' + opts);
+            sel1.value = sel1.querySelector('.dyn-upscaler')?.value || '';
+        })
+        .catch(() => {
+            clearDynamic(sel1);
+            addDynamic(sel1, '<option value="" class="dyn-upscaler">Bağlantı hatası</option>');
+        });
+}
+
+function loadComfyUIUpscalers() {
+    const sel1 = document.getElementById('upscalerSelect');
+    const sel2 = document.getElementById('upscaler2Select');
+
+    // Hide DB options
+    sel1.querySelectorAll('.db-upscaler').forEach(o => { o.style.display = 'none'; o.disabled = true; });
+    sel2.querySelectorAll('.db-upscaler').forEach(o => { o.style.display = 'none'; o.disabled = true; });
+
+    clearDynamic(sel1);
+    clearDynamic(sel2);
+    addDynamic(sel1, '<option value="" class="dyn-upscaler">Yükleniyor...</option>');
+
+    fetch('/api/comfyui-upscalers')
+        .then(r => r.json())
+        .then(data => {
+            clearDynamic(sel1);
+            clearDynamic(sel2);
+            if (!data.upscalers || data.upscalers.length === 0) {
+                addDynamic(sel1, '<option value="" class="dyn-upscaler">Upscale modeli bulunamadı</option>');
+                return;
+            }
+            const opts = data.upscalers.map(u =>
+                `<option value="${u}" class="dyn-upscaler">${u.replace(/\.[^.]+$/, '')}</option>`
+            ).join('');
+            addDynamic(sel1, opts);
+            sel1.value = sel1.querySelector('.dyn-upscaler')?.value || '';
+        })
+        .catch(() => {
+            clearDynamic(sel1);
+            addDynamic(sel1, '<option value="" class="dyn-upscaler">ComfyUI bağlantı hatası</option>');
+        });
+}
+
+function loadCloudUpscalers(providerId) {
+    const sel1 = document.getElementById('upscalerSelect');
+    const sel2 = document.getElementById('upscaler2Select');
+
+    // Remove dynamic local options
+    sel1.querySelectorAll('.dyn-upscaler').forEach(o => o.remove());
+    sel2.querySelectorAll('.dyn-upscaler').forEach(o => o.remove());
+
+    // Show/hide DB options matching provider
+    let first1 = null;
+    sel1.querySelectorAll('.db-upscaler').forEach(opt => {
+        const match = opt.dataset.provider === providerId;
+        opt.style.display = match ? '' : 'none';
+        opt.disabled = !match;
+        if (match && !first1) first1 = opt;
+    });
+    sel2.querySelectorAll('.db-upscaler').forEach(opt => {
+        const match = opt.dataset.provider === providerId;
+        opt.style.display = match ? '' : 'none';
+        opt.disabled = !match;
+    });
+
+    if (first1) {
+        sel1.value = first1.value;
+    } else {
+        // No cloud upscaler for this provider
+        const empty = document.createElement('option');
+        empty.value = '';
+        empty.textContent = 'Bu provider için upscaler yok';
+        empty.className = 'dyn-upscaler';
+        sel1.prepend(empty);
+        sel1.value = '';
+    }
+}
+
+// Initialize
+onProviderChange();
+
+// ── Enhance ─────────────────────────────────────
+
+let lastImageBase64 = null;
+
+function enhanceImage() {
+    if (!sourceBase64) {
+        alert('Lütfen bir kaynak görsel seçin');
+        return;
+    }
+
+    const upscaler1 = document.getElementById('upscalerSelect').value;
+    if (!upscaler1) {
+        alert('Upscaler model seçilmedi');
+        return;
+    }
+
+    const providerKey = getProviderKey();
+    const btn = document.getElementById('btnEnhance');
+    const viewport = document.getElementById('canvasViewport');
+
+    const params = {
+        image_base64: sourceBase64,
+        provider_key: providerKey,
+        model_key: upscaler1,
+        upscaler_1: upscaler1,
+    };
+
+    // Scale param (local + ComfyUI)
+    if (providerKey === 'local' || providerKey === 'comfyui') {
+        params.upscaling_resize = parseInt(document.getElementById('scaleRange').value);
+    }
+
+    // SD WebUI specific params
+    if (providerKey === 'local') {
+        params.upscaler_2 = document.getElementById('upscaler2Select').value;
+        params.upscaler_2_visibility = parseFloat(document.getElementById('blendRange').value);
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enhance ediliyor...';
+    viewport.innerHTML = '<div class="canvas-loading"><i class="fas fa-spinner fa-spin"></i><p>Upscale işlemi devam ediyor...</p></div>';
+
+    fetch('/api/upscale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params)
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.status === 'success' && data.image_base64) {
+            lastImageBase64 = data.image_base64;
+
+            viewport.innerHTML = `<img src="data:image/png;base64,${data.image_base64}" alt="Enhanced" id="canvasImage">`;
+            currentZoom = 1.0;
+            document.getElementById('zoomLevel').textContent = '100%';
+            document.getElementById('toolbarActions').style.display = '';
+
+            if (data.elapsed) {
+                console.log(`Enhance süresi: ${data.elapsed}s`);
+            }
+        } else {
+            viewport.innerHTML = `<div class="canvas-empty"><i class="fas fa-exclamation-triangle"></i><h3>Hata</h3><p>${data.message || 'Enhance başarısız'}</p></div>`;
+        }
+    })
+    .catch(err => {
+        viewport.innerHTML = '<div class="canvas-empty"><i class="fas fa-exclamation-triangle"></i><h3>Bağlantı Hatası</h3><p>Sunucuya bağlanılamadı</p></div>';
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Enhance';
+    });
+}
+
+// ── Image Actions ───────────────────────────────
+
+function downloadImage() {
+    if (!lastImageBase64) return;
+    const a = document.createElement('a');
+    a.href = 'data:image/png;base64,' + lastImageBase64;
+    a.download = 'mekanai_enhanced_' + Date.now() + '.png';
+    a.click();
+}
+
+function openProjectModal() {
+    if (!lastImageBase64) return;
+    const modal = document.getElementById('projectModal');
+    const list = document.getElementById('projectList');
+    list.innerHTML = '<div class="modal-loading"><i class="fas fa-spinner fa-spin"></i></div>';
+    modal.classList.add('open');
+
+    fetch('/api/projects')
+        .then(r => r.json())
+        .then(data => {
+            if (!data.projects || data.projects.length === 0) {
+                list.innerHTML = '<div class="project-empty">Henüz proje yok.<br>Önce Projects sayfasından proje oluşturun.</div>';
+                return;
+            }
+            list.innerHTML = data.projects.map(p => `
+                <div class="project-item" onclick="saveToProject(${p.id})">
+                    <i class="fas fa-folder"></i>
+                    <div class="project-item-info">
+                        <div class="project-item-name">${p.name}</div>
+                        <div class="project-item-meta">${p.description || ''}</div>
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(() => {
+            list.innerHTML = '<div class="project-empty">Projeler yüklenemedi.</div>';
+        });
+}
+
+function closeProjectModal() {
+    document.getElementById('projectModal').classList.remove('open');
+}
+
+function saveToProject(projectId) {
+    if (!lastImageBase64) return;
+    const list = document.getElementById('projectList');
+    list.innerHTML = '<div class="modal-loading"><i class="fas fa-spinner fa-spin"></i></div>';
+
+    fetch('/api/save-to-project', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            project_id: projectId,
+            image_base64: lastImageBase64,
+            settings: {
+                source: 'upscale',
+                upscaler: document.getElementById('upscalerSelect').value,
+                scale: parseInt(document.getElementById('scaleRange').value),
+            }
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.status === 'success') {
+            list.innerHTML = '<div class="project-empty"><i class="fas fa-check" style="color:var(--primary-color);font-size:24px;"></i><br>Kaydedildi!</div>';
+            setTimeout(closeProjectModal, 1000);
+        } else {
+            list.innerHTML = '<div class="project-empty">Hata: ' + (data.message || 'Kaydedilemedi') + '</div>';
+        }
+    })
+    .catch(() => {
+        list.innerHTML = '<div class="project-empty">Bağlantı hatası.</div>';
+    });
+}
+
+// Close modal on overlay click
+document.getElementById('projectModal').addEventListener('click', function(e) {
+    if (e.target === this) closeProjectModal();
+});
+
+// ── Receive image from Canvas/Sketch (sessionStorage) ─
+(function() {
+    const b64 = sessionStorage.getItem('mekanai_enhance_image');
+    if (!b64) return;
+    sessionStorage.removeItem('mekanai_enhance_image');
+    sourceBase64 = b64;
+    document.getElementById('sourcePreview').innerHTML =
+        `<img src="data:image/png;base64,${b64}" alt="Source" id="sourceImage">
+         <input type="file" id="sourceInput" accept="image/*" style="display:none" onchange="loadSourceImage(this)">`;
+})();
+
+// ── Load project image as base64 (from ?image=ID) ─
+(function() {
+    const img = document.querySelector('#sourcePreview img');
+    if (!img || sourceBase64) return;
+    // Image loaded from project — convert to base64 via canvas
+    const convertToBase64 = () => {
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        c.getContext('2d').drawImage(img, 0, 0);
+        sourceBase64 = c.toDataURL('image/png').split(',')[1];
+    };
+    if (img.complete) {
+        convertToBase64();
+    } else {
+        img.onload = convertToBase64;
+    }
+})();
+</script>
+{% endblock %}

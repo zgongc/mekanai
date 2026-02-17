@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }} - MekanAI{% endblock %}
+
+{% block content %}
+<div class="project-detail-container">
+    <div class="page-header">
+        <div class="page-header-left">
+            <a href="/projects" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h2 id="projectName">{{ project.name }}</h2>
+                {% if project.description %}
+                <p class="project-description" id="projectDesc">{{ project.description }}</p>
+                {% else %}
+                <p class="project-description" id="projectDesc" style="display:none;"></p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="page-header-actions">
+            <button class="btn-secondary" onclick="openEditModal()">
+                <i class="fas fa-pen"></i> Projeyi Düzenle
+            </button>
+            <button class="btn-primary" onclick="document.getElementById('imageInput').click()">
+                <i class="fas fa-upload"></i> Görsel Ekle
+            </button>
+            <button class="btn-danger-outline" id="btnDeleteMode" onclick="toggleDeleteMode()">
+                <i class="fas fa-check-square"></i> Görselleri Sil
+            </button>
+            <button class="btn-danger-outline" onclick="confirmDeleteProject()">
+                <i class="fas fa-trash"></i> Projeyi Sil
+            </button>
+            <input type="file" id="imageInput" multiple accept="image/*" style="display:none" onchange="uploadImages(this.files)">
+        </div>
+    </div>
+
+    <!-- Delete mode toolbar -->
+    <div class="delete-toolbar" id="deleteToolbar" style="display:none">
+        <span id="selectedCount">0 görsel seçili</span>
+        <div class="delete-toolbar-actions">
+            <button class="btn-secondary btn-sm" onclick="selectAll()">Tümünü Seç</button>
+            <button class="btn-danger btn-sm" onclick="deleteSelected()">
+                <i class="fas fa-trash"></i> Seçilenleri Sil
+            </button>
+            <button class="btn-secondary btn-sm" onclick="toggleDeleteMode()">İptal</button>
+        </div>
+    </div>
+
+    <!-- Upload Progress -->
+    <div class="upload-progress" id="uploadProgress" style="display:none">
+        <div class="upload-progress-bar">
+            <div class="upload-progress-fill" id="uploadFill"></div>
+        </div>
+        <span id="uploadText">Yükleniyor...</span>
+    </div>
+
+    {% if images %}
+    <div class="images-grid" id="imagesGrid">
+        {% for img in images %}
+        <div class="image-card" data-id="{{ img.id }}">
+            <div class="image-checkbox" onclick="toggleSelect(event, {{ img.id }})">
+                <i class="far fa-square"></i>
+            </div>
+            {% if img.child_count > 0 %}
+            <span class="child-badge" title="{{ img.child_count }} türev görsel">{{ img.child_count }}</span>
+            {% endif %}
+            <img src="/projects/{{ project.id }}/images/{{ img.filename }}" alt="{{ img.filename }}" loading="lazy" onclick="openImageChildren({{ img.id }}, this)">
+            <div class="image-card-footer">
+                <span class="image-filename">{{ img.filename }}</span>
+                <div class="image-actions">
+                    <button class="img-action-btn" title="Sketch'e Gönder" onclick="loadToSketch({{ img.id }})">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </button>
+                    <button class="img-action-btn" title="Enhance'a Gönder" onclick="loadToEnhance({{ img.id }})">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button class="img-action-btn" title="Floorplan'a Gönder" onclick="loadToFloorplan({{ img.id }})">
+                        <i class="fas fa-map"></i>
+                    </button>
+                    <button class="img-action-btn img-action-delete" title="Sil" onclick="deleteSingleImage({{ img.id }})">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Children panel (inserted dynamically after clicked card) -->
+    <div class="children-panel" id="childrenPanel" style="display:none;">
+        <div class="children-header">
+            <span id="childrenTitle">Türev Görseller</span>
+            <button class="btn-icon" onclick="closeChildrenPanel()"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="children-grid" id="childrenGrid"></div>
+        <div class="children-empty" id="childrenEmpty" style="display:none;">
+            Henüz türev görsel yok
+        </div>
+    </div>
+
+    {% else %}
+    <div class="empty-state" id="emptyState">
+        <i class="fas fa-images"></i>
+        <h3>Henüz görsel yok</h3>
+        <p>Görsel eklemek için yukarıdaki butonu kullanın veya dosyaları sürükleyin.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Edit Project Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Projeyi Düzenle</h3>
+            <button class="modal-close" onclick="closeEditModal()"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <label>Proje Adı</label>
+            <input type="text" id="editName" value="{{ project.name }}" required>
+            <label>Açıklama</label>
+            <textarea id="editDescription" rows="3">{{ project.description or '' }}</textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeEditModal()">İptal</button>
+            <button class="btn-primary" onclick="saveProject()">Kaydet</button>
+        </div>
+    </div>
+</div>
+
+<!-- Drag & Drop overlay -->
+<div class="drop-overlay" id="dropOverlay">
+    <div class="drop-overlay-content">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Görselleri buraya bırakın</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const projectId = {{ project.id }};
+let deleteMode = false;
+let selectedIds = new Set();
+
+// ── Edit Project ─────────────────────────────────
+
+function openEditModal() {
+    document.getElementById('editModal').classList.add('active');
+    document.getElementById('editName').focus();
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('active');
+}
+
+async function saveProject() {
+    const name = document.getElementById('editName').value.trim();
+    const description = document.getElementById('editDescription').value.trim();
+    if (!name) { alert('Proje adı gerekli'); return; }
+
+    try {
+        const res = await fetch(`/api/projects/${projectId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            document.getElementById('projectName').textContent = name;
+            const descEl = document.getElementById('projectDesc');
+            if (description) {
+                descEl.textContent = description;
+                descEl.style.display = '';
+            } else {
+                descEl.style.display = 'none';
+            }
+            closeEditModal();
+        } else {
+            alert(data.message || 'Hata oluştu');
+        }
+    } catch (err) {
+        alert('Bağlantı hatası');
+    }
+}
+
+// ESC to close edit modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeEditModal();
+});
+
+// ── Upload ────────────────────────────────────────
+
+async function uploadImages(files) {
+    if (!files || files.length === 0) return;
+
+    const formData = new FormData();
+    for (const file of files) {
+        formData.append('images', file);
+    }
+
+    const progress = document.getElementById('uploadProgress');
+    const fill = document.getElementById('uploadFill');
+    const text = document.getElementById('uploadText');
+
+    progress.style.display = 'flex';
+    fill.style.width = '0%';
+    text.textContent = `${files.length} dosya yükleniyor...`;
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            fill.style.width = pct + '%';
+            text.textContent = `Yükleniyor... %${pct}`;
+        }
+    };
+
+    xhr.onload = () => {
+        const data = JSON.parse(xhr.responseText);
+        if (data.status === 'success') {
+            fill.style.width = '100%';
+            text.textContent = `${data.count} görsel yüklendi`;
+            setTimeout(() => location.reload(), 500);
+        } else {
+            text.textContent = data.message || 'Hata oluştu';
+            setTimeout(() => { progress.style.display = 'none'; }, 2000);
+        }
+    };
+
+    xhr.onerror = () => {
+        text.textContent = 'Bağlantı hatası';
+        setTimeout(() => { progress.style.display = 'none'; }, 2000);
+    };
+
+    xhr.open('POST', `/api/projects/${projectId}/upload`);
+    xhr.send(formData);
+    document.getElementById('imageInput').value = '';
+}
+
+// ── Delete Mode (checkbox) ────────────────────────
+
+function toggleDeleteMode() {
+    deleteMode = !deleteMode;
+    selectedIds.clear();
+    document.getElementById('deleteToolbar').style.display = deleteMode ? 'flex' : 'none';
+    document.querySelectorAll('.image-card').forEach(card => {
+        card.classList.toggle('selectable', deleteMode);
+        card.classList.remove('selected');
+        const icon = card.querySelector('.image-checkbox i');
+        if (icon) icon.className = 'far fa-square';
+    });
+    updateSelectedCount();
+}
+
+function toggleSelect(e, id) {
+    e.stopPropagation();
+    if (!deleteMode) return;
+
+    const card = document.querySelector(`.image-card[data-id="${id}"]`);
+    const icon = card.querySelector('.image-checkbox i');
+
+    if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+        card.classList.remove('selected');
+        icon.className = 'far fa-square';
+    } else {
+        selectedIds.add(id);
+        card.classList.add('selected');
+        icon.className = 'fas fa-check-square';
+    }
+    updateSelectedCount();
+}
+
+function selectAll() {
+    document.querySelectorAll('.image-card[data-id]').forEach(card => {
+        const id = parseInt(card.dataset.id);
+        selectedIds.add(id);
+        card.classList.add('selected');
+        const icon = card.querySelector('.image-checkbox i');
+        if (icon) icon.className = 'fas fa-check-square';
+    });
+    updateSelectedCount();
+}
+
+function updateSelectedCount() {
+    document.getElementById('selectedCount').textContent = `${selectedIds.size} görsel seçili`;
+}
+
+async function deleteSelected() {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`${selectedIds.size} görsel silinecek. Emin misiniz?`)) return;
+
+    try {
+        const res = await fetch('/api/images/delete-multiple', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: Array.from(selectedIds) })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            location.reload();
+        } else {
+            alert(data.message || 'Hata oluştu');
+        }
+    } catch (err) {
+        alert('Bağlantı hatası');
+    }
+}
+
+// ── Single Image Actions ──────────────────────────
+
+async function deleteSingleImage(id) {
+    if (!confirm('Bu görsel silinecek. Emin misiniz?')) return;
+    try {
+        const res = await fetch(`/api/images/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.status === 'success') {
+            document.querySelector(`.image-card[data-id="${id}"]`).remove();
+            closeChildrenPanel();
+            if (!document.querySelector('.image-card[data-id]')) location.reload();
+        } else {
+            alert(data.message || 'Hata oluştu');
+        }
+    } catch (err) {
+        alert('Bağlantı hatası');
+    }
+}
+
+function loadToSketch(id) {
+    window.location.href = `/sketch?image=${id}`;
+}
+
+function loadToEnhance(id) {
+    window.location.href = `/enhance?image=${id}`;
+}
+
+function loadToFloorplan(id) {
+    window.location.href = `/floorplan?image=${id}`;
+}
+
+// ── Children Panel ────────────────────────────────
+
+let activeParentId = null;
+
+async function openImageChildren(imageId, imgEl) {
+    if (deleteMode) return;
+
+    // Toggle if same image clicked
+    if (activeParentId === imageId) {
+        closeChildrenPanel();
+        return;
+    }
+    activeParentId = imageId;
+
+    const panel = document.getElementById('childrenPanel');
+    const grid = document.getElementById('childrenGrid');
+    const empty = document.getElementById('childrenEmpty');
+
+    // Highlight active card
+    document.querySelectorAll('.image-card').forEach(c => c.classList.remove('viewing'));
+    imgEl.closest('.image-card').classList.add('viewing');
+
+    // Position panel after the clicked card's row
+    const card = imgEl.closest('.image-card');
+    const imagesGrid = document.getElementById('imagesGrid');
+    imagesGrid.insertBefore(panel, card.nextSibling);
+
+    grid.innerHTML = '<div style="padding:20px; color:var(--text-secondary);">Yükleniyor...</div>';
+    empty.style.display = 'none';
+    panel.style.display = 'block';
+
+    try {
+        const res = await fetch(`/api/images/${imageId}/children`);
+        const data = await res.json();
+        const items = data.items || [];
+
+        if (items.length === 0) {
+            grid.innerHTML = '';
+            empty.style.display = 'block';
+        } else {
+            empty.style.display = 'none';
+            grid.innerHTML = items.map(img => `
+                <div class="image-card child-card" data-id="${img.id}">
+                    <img src="/projects/${projectId}/images/${img.filename}" alt="${img.filename}" loading="lazy">
+                    <div class="image-card-footer">
+                        <span class="image-filename">${img.filename}</span>
+                        <div class="image-actions">
+                            <button class="img-action-btn" title="Sketch'e Gönder" onclick="loadToSketch(${img.id})">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                            </button>
+                            <button class="img-action-btn" title="Enhance'a Gönder" onclick="loadToEnhance(${img.id})">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="img-action-btn" title="Floorplan'a Gönder" onclick="loadToFloorplan(${img.id})">
+                                <i class="fas fa-map"></i>
+                            </button>
+                            <button class="img-action-btn img-action-delete" title="Sil" onclick="deleteSingleImage(${img.id})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    } catch (err) {
+        grid.innerHTML = '<div style="padding:20px; color:#f87171;">Yüklenemedi</div>';
+    }
+}
+
+function closeChildrenPanel() {
+    document.getElementById('childrenPanel').style.display = 'none';
+    document.querySelectorAll('.image-card').forEach(c => c.classList.remove('viewing'));
+    activeParentId = null;
+}
+
+// ── Delete Project ────────────────────────────────
+
+async function confirmDeleteProject() {
+    if (!confirm('Bu proje ve tüm görselleri kalıcı olarak silinecek!\n\nEmin misiniz?')) return;
+
+    try {
+        const res = await fetch(`/api/projects/${projectId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.status === 'success') {
+            window.location.href = '/projects';
+        } else {
+            alert(data.message || 'Hata oluştu');
+        }
+    } catch (err) {
+        alert('Bağlantı hatası');
+    }
+}
+
+// ── Drag & Drop ───────────────────────────────────
+
+const container = document.querySelector('.project-detail-container');
+const overlay = document.getElementById('dropOverlay');
+let dragCounter = 0;
+
+container.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    dragCounter++;
+    overlay.classList.add('active');
+});
+
+container.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter === 0) overlay.classList.remove('active');
+});
+
+container.addEventListener('dragover', (e) => e.preventDefault());
+
+container.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dragCounter = 0;
+    overlay.classList.remove('active');
+    if (e.dataTransfer.files.length > 0) uploadImages(e.dataTransfer.files);
+});
+</script>
+{% endblock %}

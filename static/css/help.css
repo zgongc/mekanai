@@ -1,0 +1,575 @@
+/* ═══════════════════════════════════════════════
+   Help Page Styles
+   ═══════════════════════════════════════════════ */
+
+.help-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ── Quick Nav ────────────────────────────────── */
+
+.help-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+    margin-bottom: 32px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.help-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.help-nav-item:hover {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.help-nav-item.active {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.help-nav-item i {
+    font-size: 12px;
+}
+
+/* ── Sections ─────────────────────────────────── */
+
+.help-section {
+    margin-bottom: 48px;
+    scroll-margin-top: 80px;
+}
+
+.help-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.help-section h2 i {
+    color: var(--primary-color);
+    font-size: 20px;
+}
+
+.section-desc {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.section-desc code {
+    background: var(--hover-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.subsection-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 24px 0 16px;
+}
+
+/* ── Cards ────────────────────────────────────── */
+
+.help-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.help-card:hover {
+    border-color: var(--primary-color);
+}
+
+.help-card.compact {
+    padding: 20px;
+}
+
+.help-card.compact h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.help-card.compact p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.help-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 20px 0;
+}
+
+.help-card-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.help-card-body {
+    padding: 16px 20px 20px;
+}
+
+.help-card-body h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* Provider Badge */
+
+.provider-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.provider-badge.openai { background: linear-gradient(135deg, #412991, #10a37f); }
+.provider-badge.gemini { background: linear-gradient(135deg, #4285f4, #ea4335); }
+.provider-badge.stability { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+.provider-badge.grok { background: linear-gradient(135deg, #1a1a1a, #333); }
+.provider-badge.local { background: linear-gradient(135deg, #059669, #10b981); }
+.provider-badge.comfyui { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+
+/* Tags */
+
+.help-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--hover-bg);
+    color: var(--text-secondary);
+}
+
+.help-tag.tag-paid { background: #fef3c7; color: #92400e; }
+.help-tag.tag-free { background: #d1fae5; color: #065f46; }
+.help-tag.tag-local { background: #dbeafe; color: #1e40af; }
+
+/* Ordered list */
+
+.help-card-body ol {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.help-card-body ol li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.help-card-body ol li a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.help-card-body ol li a:hover {
+    text-decoration: underline;
+}
+
+.help-card-body ol li code {
+    background: var(--hover-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Pricing / Requirements info */
+
+.help-pricing,
+.help-requirements {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--hover-bg);
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.help-pricing i { color: var(--primary-color); }
+.help-requirements i { color: #f59e0b; }
+
+/* Tip */
+
+.help-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    margin-top: 24px;
+}
+
+.help-tip > i {
+    color: #3b82f6;
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.help-tip a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.help-tip code {
+    background: var(--hover-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.help-tip-inline {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.06);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.help-tip-inline i { color: #f59e0b; }
+
+.help-tip-inline code {
+    background: var(--hover-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Help Link */
+
+.help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.help-link:hover {
+    text-decoration: underline;
+}
+
+.help-link i {
+    font-size: 10px;
+}
+
+/* Grid */
+
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+/* ── Table ────────────────────────────────────── */
+
+.help-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.help-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.help-table thead {
+    background: var(--hover-bg);
+}
+
+.help-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+}
+
+.help-table td {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.help-table td a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.help-table td a:hover {
+    text-decoration: underline;
+}
+
+.help-table td a i {
+    font-size: 10px;
+    margin-left: 2px;
+}
+
+.help-table tbody tr:hover {
+    background: var(--hover-bg);
+}
+
+/* ── Prompt Section ───────────────────────────── */
+
+.prompt-formula {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    background: var(--hover-bg);
+    border-radius: 8px;
+}
+
+.pf-item {
+    padding: 6px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.pf-sep {
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+.prompt-example {
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.prompt-example.good {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--text-primary);
+}
+
+.prompt-example.bad {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: var(--text-secondary);
+}
+
+.prompt-example.negative {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    color: var(--text-secondary);
+}
+
+/* Keywords */
+
+.keyword-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.keyword-group h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.keyword-group .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.keyword-group .keywords span {
+    padding: 4px 10px;
+    background: var(--hover-bg);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: default;
+    transition: all 0.2s;
+}
+
+.keyword-group .keywords span:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* ── FAQ / Troubleshooting ────────────────────── */
+
+.faq-list {
+    padding: 0 !important;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-item summary {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: background 0.2s;
+}
+
+.faq-item summary:hover {
+    background: var(--hover-bg);
+}
+
+.faq-item summary i {
+    color: #f59e0b;
+    font-size: 14px;
+}
+
+.faq-item summary::marker,
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-answer {
+    padding: 0 20px 16px 44px;
+}
+
+.faq-answer ul {
+    margin: 0;
+    padding-left: 16px;
+}
+
+.faq-answer ul li {
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+.faq-answer code {
+    background: var(--hover-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* ── Responsive ───────────────────────────────── */
+
+@media (max-width: 768px) {
+    .help-container {
+        padding: 12px;
+    }
+
+    .help-nav {
+        gap: 6px;
+        padding: 12px;
+        position: static;
+    }
+
+    .help-nav-item {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .help-section h2 {
+        font-size: 20px;
+    }
+
+    .help-card-header {
+        padding: 16px 16px 0;
+    }
+
+    .help-card-body {
+        padding: 12px 16px 16px;
+    }
+
+    .provider-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .keyword-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prompt-formula {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pf-sep {
+        display: none;
+    }
+
+    .help-grid {
+        grid-template-columns: 1fr;
+    }
+}

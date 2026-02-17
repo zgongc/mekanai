@@ -1,0 +1,20 @@
+# Flask Web Framework
+Flask
+Werkzeug
+
+# Image Processing
+Pillow
+opencv-python
+
+# API / HTTP
+requests
+openai
+
+# Database ORM
+SQLAlchemy>=2.0
+
+# Configuration
+PyYAML
+
+# Utilities
+python-dotenv

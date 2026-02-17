@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# Environment & Secrets
+configs/.env
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI Model weights (too large for git)
+*.ckpt
+*.safetensors
+*.pth
+*.bin
+
+# Database
+data/db/*.db
+data/db/*.db-shm
+data/db/*.db-wal
+
+# User project files
+data/projects/
+
+# Generated images
+static/images/generated/
+outputs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/

@@ -1,0 +1,84 @@
+{
+  "modes": [
+    {
+      "name": "Detail",
+      "key": "detail",
+      "description": "Kaynak görsele sadık, zengin detay ve hassas kontrol",
+      "icon": "detail.svg",
+      "controlnet_module": "depth_midas",
+      "controlnet_weight": 1.0,
+      "denoising_strength": 0.3,
+      "sort_order": 1
+    },
+    {
+      "name": "Structure",
+      "key": "structure",
+      "description": "Yapı koruyarak ultra hassas sonuçlar — en yüksek doğruluk",
+      "icon": "structure.svg",
+      "controlnet_module": "lineart",
+      "controlnet_weight": 1.0,
+      "denoising_strength": 0.4,
+      "sort_order": 2
+    },
+    {
+      "name": "Precise",
+      "key": "precise",
+      "description": "Doğruluk odaklı, kontrollü yaratıcılık",
+      "icon": "precise.svg",
+      "controlnet_module": "canny",
+      "controlnet_weight": 0.9,
+      "denoising_strength": 0.5,
+      "sort_order": 3
+    },
+    {
+      "name": "Outline",
+      "key": "outline",
+      "description": "Dış hatları koruyarak yaratıcı yorumlama",
+      "icon": "outline.svg",
+      "controlnet_module": "canny",
+      "controlnet_weight": 0.7,
+      "denoising_strength": 0.6,
+      "sort_order": 4
+    },
+    {
+      "name": "Depth",
+      "key": "depth",
+      "description": "Gerçek fotoğraflar ve 3D model ekran görüntüleri için ideal",
+      "icon": "depth.svg",
+      "controlnet_module": "depth_midas",
+      "controlnet_weight": 0.8,
+      "denoising_strength": 0.5,
+      "sort_order": 5
+    },
+    {
+      "name": "Precision Concept",
+      "key": "precision_concept",
+      "description": "Hassas detay koruyarak zengin yaratıcı güç",
+      "icon": "precision_concept.svg",
+      "controlnet_module": "depth_midas",
+      "controlnet_weight": 0.6,
+      "denoising_strength": 0.65,
+      "sort_order": 6
+    },
+    {
+      "name": "Concept",
+      "key": "concept",
+      "description": "Yaratıcılık ön planda, hassasiyetten ödün vererek iyi sonuçlar",
+      "icon": "concept.svg",
+      "controlnet_module": "depth_midas",
+      "controlnet_weight": 0.4,
+      "denoising_strength": 0.75,
+      "sort_order": 7
+    },
+    {
+      "name": "Free",
+      "key": "free",
+      "description": "Tam yaratıcı özgürlük — kaynak görselden bağımsız, sadece prompt",
+      "icon": "free.svg",
+      "controlnet_module": null,
+      "controlnet_weight": 0.0,
+      "denoising_strength": 1.0,
+      "sort_order": 8
+    }
+  ]
+}

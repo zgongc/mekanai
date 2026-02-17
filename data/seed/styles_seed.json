@@ -1,0 +1,271 @@
+{
+  "categories": [
+    {
+      "key": "photography",
+      "name": "Photography",
+      "subcategories": [
+        {"key": "general", "name": "General"},
+        {"key": "interior", "name": "Interior Photography"},
+        {"key": "architectural", "name": "Architectural Photography"},
+        {"key": "real_estate", "name": "Real Estate Photography"}
+      ]
+    },
+    {
+      "key": "3d_render",
+      "name": "3D Render",
+      "subcategories": [
+        {"key": "general", "name": "General"},
+        {"key": "vray", "name": "V-Ray"},
+        {"key": "corona", "name": "Corona"},
+        {"key": "unreal", "name": "Unreal Engine"},
+        {"key": "octane", "name": "Octane"}
+      ]
+    },
+    {
+      "key": "illustration",
+      "name": "Illustration",
+      "subcategories": [
+        {"key": "watercolor", "name": "Watercolor"},
+        {"key": "pencil", "name": "Pencil Sketch"},
+        {"key": "ink", "name": "Ink Drawing"},
+        {"key": "digital", "name": "Digital Art"}
+      ]
+    },
+    {
+      "key": "conceptual",
+      "name": "Conceptual Art",
+      "subcategories": [
+        {"key": "mood_board", "name": "Mood Board"},
+        {"key": "collage", "name": "Collage"},
+        {"key": "abstract", "name": "Abstract"}
+      ]
+    }
+  ],
+  "styles": [
+    {
+      "name": "Realistic",
+      "category": "photography",
+      "subcategory": "general",
+      "prompt_snippet": "photorealistic, 8k uhd, high detail, sharp focus, professional photography",
+      "negative_snippet": "cartoon, anime, illustration, painting, drawing, low quality, blurry",
+      "thumbnail": "realistic.jpg",
+      "sort_order": 1
+    },
+    {
+      "name": "Natural Light",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "natural lighting, soft shadows, window light, warm tones, interior photography",
+      "negative_snippet": "artificial lighting, harsh shadows, overexposed, dark",
+      "thumbnail": "natural_light.jpg",
+      "sort_order": 2
+    },
+    {
+      "name": "Cinematic",
+      "category": "photography",
+      "subcategory": "general",
+      "prompt_snippet": "cinematic lighting, dramatic shadows, film grain, movie still, depth of field",
+      "negative_snippet": "flat lighting, overexposed, amateur, snapshot",
+      "thumbnail": "cinematic.jpg",
+      "sort_order": 3
+    },
+    {
+      "name": "Magazine Editorial",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "architectural digest style, magazine editorial, professional interior photography, perfectly staged, crisp details",
+      "negative_snippet": "amateur, cluttered, low resolution, distorted",
+      "thumbnail": "magazine.jpg",
+      "sort_order": 4
+    },
+    {
+      "name": "Real Estate HDR",
+      "category": "photography",
+      "subcategory": "real_estate",
+      "prompt_snippet": "real estate photography, HDR, wide angle, bright and airy, well-lit interior, professional listing photo",
+      "negative_snippet": "dark, narrow, fisheye distortion, amateur",
+      "thumbnail": "real_estate.jpg",
+      "sort_order": 5
+    },
+    {
+      "name": "V-Ray Render",
+      "category": "3d_render",
+      "subcategory": "vray",
+      "prompt_snippet": "V-Ray render, photorealistic 3D visualization, global illumination, accurate materials, ray tracing",
+      "negative_snippet": "flat shading, wireframe, low poly, unrealistic",
+      "thumbnail": "vray.jpg",
+      "sort_order": 10
+    },
+    {
+      "name": "Corona Render",
+      "category": "3d_render",
+      "subcategory": "corona",
+      "prompt_snippet": "Corona renderer, soft realistic lighting, physical materials, architectural visualization, caustics",
+      "negative_snippet": "harsh, cartoonish, flat, unrealistic materials",
+      "thumbnail": "corona.jpg",
+      "sort_order": 11
+    },
+    {
+      "name": "Unreal Engine 5",
+      "category": "3d_render",
+      "subcategory": "unreal",
+      "prompt_snippet": "Unreal Engine 5, Lumen global illumination, Nanite, photorealistic real-time render, ray tracing",
+      "negative_snippet": "low poly, pixelated, game engine artifacts",
+      "thumbnail": "unreal.jpg",
+      "sort_order": 12
+    },
+    {
+      "name": "Octane Render",
+      "category": "3d_render",
+      "subcategory": "octane",
+      "prompt_snippet": "Octane render, GPU ray tracing, cinematic quality, subsurface scattering, volumetric lighting",
+      "negative_snippet": "flat, unrealistic, noisy, low quality",
+      "thumbnail": "octane.jpg",
+      "sort_order": 13
+    },
+    {
+      "name": "Watercolor",
+      "category": "illustration",
+      "subcategory": "watercolor",
+      "prompt_snippet": "watercolor painting, soft washes, paper texture, artistic, hand-painted interior illustration",
+      "negative_snippet": "photorealistic, sharp edges, digital, 3D render",
+      "thumbnail": "watercolor.jpg",
+      "sort_order": 20
+    },
+    {
+      "name": "Pencil Sketch",
+      "category": "illustration",
+      "subcategory": "pencil",
+      "prompt_snippet": "detailed pencil sketch, architectural drawing, hand-drawn, graphite, cross-hatching, white paper",
+      "negative_snippet": "color, photorealistic, digital, 3D",
+      "thumbnail": "pencil.jpg",
+      "sort_order": 21
+    },
+    {
+      "name": "Ink & Wash",
+      "category": "illustration",
+      "subcategory": "ink",
+      "prompt_snippet": "ink wash drawing, architectural illustration, pen and ink, loose strokes, artistic interior sketch",
+      "negative_snippet": "photorealistic, 3D render, digital art",
+      "thumbnail": "ink.jpg",
+      "sort_order": 22
+    },
+    {
+      "name": "Modern Minimalist",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "modern minimalist interior, clean lines, neutral palette, scandinavian design, less is more, white walls",
+      "negative_snippet": "cluttered, ornate, busy patterns, dark, maximalist",
+      "thumbnail": "minimalist.jpg",
+      "sort_order": 30
+    },
+    {
+      "name": "Industrial Loft",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "industrial loft interior, exposed brick, metal beams, concrete floors, edison bulbs, raw materials",
+      "negative_snippet": "polished, delicate, traditional, ornate",
+      "thumbnail": "industrial.jpg",
+      "sort_order": 31
+    },
+    {
+      "name": "Luxury Classic",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "luxury classic interior, marble floors, crystal chandelier, gold accents, rich fabrics, elegant furniture",
+      "negative_snippet": "cheap, modern, minimalist, industrial",
+      "thumbnail": "luxury.jpg",
+      "sort_order": 32
+    },
+    {
+      "name": "Bohemian",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "bohemian interior design, eclectic, layered textiles, plants, warm colors, macrame, vintage furniture",
+      "negative_snippet": "sterile, minimal, cold, corporate",
+      "thumbnail": "bohemian.jpg",
+      "sort_order": 33
+    },
+    {
+      "name": "Japanese Wabi-Sabi",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "wabi-sabi interior, japanese aesthetic, natural imperfection, organic materials, zen, muted earth tones",
+      "negative_snippet": "flashy, colorful, ornate, synthetic",
+      "thumbnail": "wabisabi.jpg",
+      "sort_order": 34
+    },
+    {
+      "name": "Mid-Century Modern",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "mid-century modern interior, retro furniture, organic shapes, teak wood, bold accent colors, 1960s design",
+      "negative_snippet": "contemporary, traditional, industrial",
+      "thumbnail": "midcentury.jpg",
+      "sort_order": 35
+    },
+    {
+      "name": "Art Deco",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "art deco interior, geometric patterns, velvet, brass, bold colors, glamorous, 1920s inspired",
+      "negative_snippet": "rustic, minimal, industrial, casual",
+      "thumbnail": "artdeco.jpg",
+      "sort_order": 36
+    },
+    {
+      "name": "Rustic Farmhouse",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "rustic farmhouse interior, reclaimed wood, shiplap walls, vintage accessories, warm cozy, country charm",
+      "negative_snippet": "modern, sleek, urban, high-tech",
+      "thumbnail": "farmhouse.jpg",
+      "sort_order": 37
+    },
+    {
+      "name": "Golden Hour",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "golden hour lighting, warm sunset light streaming through windows, long shadows, warm amber tones",
+      "negative_snippet": "cold, blue, night, artificial light, harsh",
+      "thumbnail": "golden_hour.jpg",
+      "sort_order": 40
+    },
+    {
+      "name": "Night Mood",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "nighttime interior, ambient lighting, warm lamp glow, cozy atmosphere, city lights through windows",
+      "negative_snippet": "daylight, bright, overexposed, harsh light",
+      "thumbnail": "night.jpg",
+      "sort_order": 41
+    },
+    {
+      "name": "Bright & Airy",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "bright and airy interior, lots of natural light, white walls, high ceilings, open space, fresh clean look",
+      "negative_snippet": "dark, moody, cramped, heavy, cluttered",
+      "thumbnail": "bright_airy.jpg",
+      "sort_order": 42
+    },
+    {
+      "name": "Dramatic Contrast",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "dramatic interior photography, high contrast, dark moody shadows, spotlight effect, chiaroscuro lighting",
+      "negative_snippet": "flat, evenly lit, bright, washed out",
+      "thumbnail": "dramatic.jpg",
+      "sort_order": 43
+    },
+    {
+      "name": "Winter Cold",
+      "category": "photography",
+      "subcategory": "interior",
+      "prompt_snippet": "winter interior, cool blue tones, snow visible through windows, cozy warm inside, fireplace, hygge",
+      "negative_snippet": "summer, tropical, hot, warm tones only",
+      "thumbnail": "winter.jpg",
+      "sort_order": 44
+    }
+  ]
+}

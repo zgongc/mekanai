@@ -1,0 +1,581 @@
+{% extends "base.html" %}
+
+{% block title %}Yardım - MekanAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="help-container">
+
+    <!-- Quick Nav -->
+    <div class="help-nav">
+        <a href="#providers" class="help-nav-item active" onclick="scrollToSection('providers', this)">
+            <i class="fas fa-cloud"></i> API Anahtarları
+        </a>
+        <a href="#local-setup" class="help-nav-item" onclick="scrollToSection('local-setup', this)">
+            <i class="fas fa-server"></i> Lokal Kurulum
+        </a>
+        <a href="#models" class="help-nav-item" onclick="scrollToSection('models', this)">
+            <i class="fas fa-download"></i> Model İndirme
+        </a>
+        <a href="#upscalers" class="help-nav-item" onclick="scrollToSection('upscalers', this)">
+            <i class="fas fa-expand"></i> Upscale Modelleri
+        </a>
+        <a href="#prompting" class="help-nav-item" onclick="scrollToSection('prompting', this)">
+            <i class="fas fa-lightbulb"></i> Prompt İpuçları
+        </a>
+        <a href="#troubleshooting" class="help-nav-item" onclick="scrollToSection('troubleshooting', this)">
+            <i class="fas fa-wrench"></i> Sorun Giderme
+        </a>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION: Cloud API Keys -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="providers" class="help-section">
+        <h2><i class="fas fa-cloud"></i> Cloud Provider API Anahtarları</h2>
+        <p class="section-desc">Cloud AI provider'ları kullanmak için API anahtarı almanız gerekir. Anahtarı aldıktan sonra <strong>Ayarlar > Providers</strong> sayfasından ilgili provider'a girin.</p>
+
+        <!-- OpenAI -->
+        <div class="help-card">
+            <div class="help-card-header">
+                <div class="provider-badge openai">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div>
+                    <h3>OpenAI (DALL-E 3)</h3>
+                    <span class="help-tag">Cloud API</span>
+                    <span class="help-tag tag-paid">Paid</span>
+                </div>
+            </div>
+            <div class="help-card-body">
+                <ol>
+                    <li><a href="https://platform.openai.com/signup" target="_blank" rel="noopener">platform.openai.com</a> adresinden hesap oluşturun</li>
+                    <li><strong>API Keys</strong> sayfasına gidin: Settings > API Keys</li>
+                    <li><strong>Create new secret key</strong> butonuna tıklayın</li>
+                    <li>Anahtarı kopyalayın (<code>sk-...</code> ile başlar)</li>
+                    <li>Kredi kartı ekleyip bakiye yükleyin (Pay as you go)</li>
+                </ol>
+                <div class="help-pricing">
+                    <i class="fas fa-tag"></i> DALL-E 3: ~$0.04/görsel (1024x1024), ~$0.08/görsel (1792x1024)
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Gemini -->
+        <div class="help-card">
+            <div class="help-card-header">
+                <div class="provider-badge gemini">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div>
+                    <h3>Google Gemini (Imagen)</h3>
+                    <span class="help-tag">Cloud API</span>
+                    <span class="help-tag tag-free">Free tier mevcut</span>
+                </div>
+            </div>
+            <div class="help-card-body">
+                <ol>
+                    <li><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> adresine gidin</li>
+                    <li>Google hesabınızla giriş yapın</li>
+                    <li><strong>Create API Key</strong> butonuna tıklayın</li>
+                    <li>Proje seçin veya yeni oluşturun</li>
+                    <li>Anahtarı kopyalayın (<code>AIza...</code> ile başlar)</li>
+                </ol>
+                <div class="help-pricing">
+                    <i class="fas fa-tag"></i> Gemini Flash: Free tier (15 RPM), Imagen 4: ~$0.02/görsel
+                </div>
+            </div>
+        </div>
+
+        <!-- Stability AI -->
+        <div class="help-card">
+            <div class="help-card-header">
+                <div class="provider-badge stability">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <div>
+                    <h3>Stability AI</h3>
+                    <span class="help-tag">Cloud API</span>
+                    <span class="help-tag tag-paid">Credit based</span>
+                </div>
+            </div>
+            <div class="help-card-body">
+                <ol>
+                    <li><a href="https://platform.stability.ai/" target="_blank" rel="noopener">platform.stability.ai</a> adresinden hesap oluşturun</li>
+                    <li>Dashboard'a girin ve <strong>API Keys</strong> bölümüne gidin</li>
+                    <li><strong>Create API Key</strong> ile yeni anahtar oluşturun</li>
+                    <li>Anahtarı kopyalayın (<code>sk-...</code> ile başlar)</li>
+                    <li>Kredi satın alın (ilk kayıtta ücretsiz kredi verilir)</li>
+                </ol>
+                <div class="help-pricing">
+                    <i class="fas fa-tag"></i> Stable Image Core: 3 credit/görsel, Structure Control: 3 credit/görsel, Conservative Upscale: 25 credit
+                </div>
+            </div>
+        </div>
+
+        <!-- xAI Grok -->
+        <div class="help-card">
+            <div class="help-card-header">
+                <div class="provider-badge grok">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div>
+                    <h3>xAI Grok (Aurora)</h3>
+                    <span class="help-tag">Cloud API</span>
+                    <span class="help-tag tag-free">Free credit</span>
+                </div>
+            </div>
+            <div class="help-card-body">
+                <ol>
+                    <li><a href="https://console.x.ai/" target="_blank" rel="noopener">console.x.ai</a> adresine gidin</li>
+                    <li>X (Twitter) hesabınızla giriş yapın</li>
+                    <li>Dashboard'dan <strong>API Keys</strong> bölümüne gidin</li>
+                    <li><strong>Create API Key</strong> ile yeni anahtar oluşturun</li>
+                    <li>Anahtarı kopyalayın (<code>xai-...</code> ile başlar)</li>
+                </ol>
+                <div class="help-pricing">
+                    <i class="fas fa-tag"></i> Grok Aurora: $0.01/görsel, kayıtta $25 ücretsiz kredi
+                </div>
+            </div>
+        </div>
+
+        <div class="help-tip">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <strong>API anahtarını nereye girmeliyim?</strong><br>
+                <a href="{{ url_for('views.settings') }}">Ayarlar</a> > Providers sekmesinden ilgili provider'ı bulun, API Key alanına yapıştırın ve <strong>Enable</strong> edin.
+                Alternatif olarak, <code>.env</code> dosyasına da ekleyebilirsiniz (OPENAI_API_KEY, GEMINI_API_KEY, vb.)
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION: Local Setup -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="local-setup" class="help-section">
+        <h2><i class="fas fa-server"></i> Lokal Sunucu Kurulumu</h2>
+        <p class="section-desc">Yerel GPU'nuzla görsel üretmek için SD WebUI Forge veya ComfyUI kurmanız gerekir.</p>
+
+        <!-- SD WebUI Forge -->
+        <div class="help-card">
+            <div class="help-card-header">
+                <div class="provider-badge local">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div>
+                    <h3>SD WebUI Forge</h3>
+                    <span class="help-tag tag-local">Local</span>
+                </div>
+            </div>
+            <div class="help-card-body">
+                <ol>
+                    <li><a href="https://github.com/lllyasviel/stable-diffusion-webui-forge" target="_blank" rel="noopener">GitHub: stable-diffusion-webui-forge</a> reposunu klonlayın</li>
+                    <li><code>webui-user.bat</code> (Windows) veya <code>webui.sh</code> (Linux) ile başlatın</li>
+                    <li>İlk çalıştırmada gerekli paketler otomatik kurulur</li>
+                    <li><code>webui.bat --listen --api</code> parametreleriyle başlatın</li>
+                    <li>Ayarlar > Providers'dan SD WebUI base URL'ini girin (ör: <code>http://192.168.1.195:7860</code>, aynı makinadaysa <code>http://localhost:7860</code>)</li>
+                </ol>
+                <div class="help-requirements">
+                    <i class="fas fa-microchip"></i> <strong>Gereksinimler:</strong> NVIDIA GPU (min. 6GB VRAM), Python 3.10+, CUDA 11.8+
+                </div>
+            </div>
+        </div>
+
+        <!-- ComfyUI -->
+        <div class="help-card">
+            <div class="help-card-header">
+                <div class="provider-badge comfyui">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div>
+                    <h3>ComfyUI</h3>
+                    <span class="help-tag tag-local">Local</span>
+                </div>
+            </div>
+            <div class="help-card-body">
+                <ol>
+                    <li><a href="https://github.com/comfyanonymous/ComfyUI" target="_blank" rel="noopener">GitHub: ComfyUI</a> reposunu klonlayın</li>
+                    <li><code>pip install -r requirements.txt</code> ile bağımlılıkları kurun</li>
+                    <li><code>python main.py --listen 0.0.0.0</code> ile başlatın (ağ erişimi için)</li>
+                    <li>Checkpoint'ları <code>ComfyUI/models/checkpoints/</code> klasörüne koyun</li>
+                    <li>Ayarlar > Providers'dan ComfyUI base URL'ini girin (ör: <code>http://192.168.1.195:8188</code>, aynı makinadaysa <code>http://localhost:8188</code>)</li>
+                </ol>
+                <div class="help-tip-inline">
+                    <i class="fas fa-lightbulb"></i> <strong>İpucu:</strong> SD WebUI ve ComfyUI aynı model klasörünü paylaşabilir.
+                    Linux'ta <code>ln -sf /path/to/models checkpoints</code>, Windows'ta <code>mklink /J checkpoints C:\path\to\models</code> ile symlink oluşturun.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION: Model Downloads -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="models" class="help-section">
+        <h2><i class="fas fa-download"></i> Checkpoint Model İndirme</h2>
+        <p class="section-desc">SD WebUI ve ComfyUI'da kullanmak için checkpoint modelleri indirin. İndirilen modelleri <code>models/Stable-diffusion/</code> (SD WebUI) veya <code>models/checkpoints/</code> (ComfyUI) klasörüne koyun.</p>
+
+        <div class="help-grid">
+            <div class="help-card compact">
+                <h3><i class="fas fa-globe"></i> CivitAI</h3>
+                <p>En büyük model topluluğu. Checkpoint, LoRA, embedding ve daha fazlası.</p>
+                <a href="https://civitai.com/models" target="_blank" rel="noopener" class="help-link">civitai.com/models <i class="fas fa-external-link-alt"></i></a>
+            </div>
+
+            <div class="help-card compact">
+                <h3><i class="fas fa-database"></i> Hugging Face</h3>
+                <p>Resmi model depoları. SDXL, FLUX, SD3.5 gibi temel modeller burada.</p>
+                <a href="https://huggingface.co/models?pipeline_tag=text-to-image" target="_blank" rel="noopener" class="help-link">huggingface.co <i class="fas fa-external-link-alt"></i></a>
+            </div>
+        </div>
+
+        <h3 class="subsection-title">Popüler Modeller</h3>
+        <div class="help-table-wrapper">
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Tür</th>
+                        <th>Boyut</th>
+                        <th>Kullanım</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>FLUX.1 Dev</strong></td>
+                        <td>Transformer</td>
+                        <td>~23 GB</td>
+                        <td>En iyi genel kalite, yavaş</td>
+                        <td><a href="https://huggingface.co/black-forest-labs/FLUX.1-dev" target="_blank" rel="noopener">HF <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>SD 3.5 Large Turbo</strong></td>
+                        <td>Transformer</td>
+                        <td>~8 GB</td>
+                        <td>Hızlı, 4-8 step yeterli</td>
+                        <td><a href="https://huggingface.co/stabilityai/stable-diffusion-3.5-large-turbo" target="_blank" rel="noopener">HF <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>RealVisXL V5</strong></td>
+                        <td>SDXL</td>
+                        <td>~6.5 GB</td>
+                        <td>Fotorealistik, iç mekan</td>
+                        <td><a href="https://civitai.com/models/139562/realvisxl" target="_blank" rel="noopener">CivitAI <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Juggernaut XL</strong></td>
+                        <td>SDXL</td>
+                        <td>~6.5 GB</td>
+                        <td>Mimari, iç mekan tasarımı</td>
+                        <td><a href="https://civitai.com/models/133005/juggernaut-xl" target="_blank" rel="noopener">CivitAI <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DreamShaper XL</strong></td>
+                        <td>SDXL</td>
+                        <td>~6.5 GB</td>
+                        <td>Genel amaçlı, yaratıcı</td>
+                        <td><a href="https://civitai.com/models/112902/dreamshaper-xl" target="_blank" rel="noopener">CivitAI <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION: Upscale Models -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="upscalers" class="help-section">
+        <h2><i class="fas fa-expand"></i> Upscale Model İndirme</h2>
+        <p class="section-desc">Enhance sayfasında kullanılacak upscale modelleri. İndirilen modelleri <code>models/ESRGAN/</code> (SD WebUI) veya <code>models/upscale_models/</code> (ComfyUI) klasörüne koyun.</p>
+
+        <div class="help-card compact" style="max-width:480px">
+            <h3><i class="fas fa-database"></i> OpenModelDB</h3>
+            <p>Upscale modelleri için en kapsamlı kaynak. Tag ve arama sistemi ile ihtiyacınıza uygun modeli kolayca bulun.</p>
+            <a href="https://openmodeldb.info/" target="_blank" rel="noopener" class="help-link">openmodeldb.info <i class="fas fa-external-link-alt"></i></a>
+        </div>
+
+        <h3 class="subsection-title">Popüler Upscale Modelleri</h3>
+        <div class="help-table-wrapper">
+            <table class="help-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Ölçek</th>
+                        <th>Kullanım</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>4x-UltraSharp</strong></td>
+                        <td>4x</td>
+                        <td>En popüler, genel amaçlı, keskin detaylar</td>
+                        <td><a href="https://openmodeldb.info/models/4x-UltraSharp" target="_blank" rel="noopener">OpenModelDB <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>RealESRGAN x4</strong></td>
+                        <td>4x</td>
+                        <td>Genel amaçlı, dengeli sonuç</td>
+                        <td><a href="https://github.com/xinntao/Real-ESRGAN" target="_blank" rel="noopener">GitHub <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>4x_foolhardy_Remacri</strong></td>
+                        <td>4x</td>
+                        <td>Fotoğraflar için mükemmel, doğal görünüm</td>
+                        <td><a href="https://openmodeldb.info/models/4x-Remacri" target="_blank" rel="noopener">OpenModelDB <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>4x-AnimeSharp</strong></td>
+                        <td>4x</td>
+                        <td>Anime/illüstrasyon için optimize</td>
+                        <td><a href="https://openmodeldb.info/models/4x-AnimeSharp" target="_blank" rel="noopener">OpenModelDB <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>8x_NMKD-Superscale</strong></td>
+                        <td>8x</td>
+                        <td>Maksimum büyütme, detay koruma</td>
+                        <td><a href="https://openmodeldb.info/models/8x-NMKD-Superscale" target="_blank" rel="noopener">OpenModelDB <i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION: Prompting Tips -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="prompting" class="help-section">
+        <h2><i class="fas fa-lightbulb"></i> İç Mekan Prompt İpuçları</h2>
+        <p class="section-desc">Daha iyi sonuçlar almak için prompt yazma teknikleri.</p>
+
+        <div class="help-card">
+            <div class="help-card-body">
+                <h3>Prompt Yapısı</h3>
+                <div class="prompt-formula">
+                    <span class="pf-item">[Mekan türü]</span>
+                    <span class="pf-sep">+</span>
+                    <span class="pf-item">[Stil]</span>
+                    <span class="pf-sep">+</span>
+                    <span class="pf-item">[Detaylar]</span>
+                    <span class="pf-sep">+</span>
+                    <span class="pf-item">[Atmosfer]</span>
+                    <span class="pf-sep">+</span>
+                    <span class="pf-item">[Kalite]</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-grid">
+            <div class="help-card compact">
+                <h3><i class="fas fa-check-circle" style="color: var(--success-color)"></i> İyi Prompt</h3>
+                <div class="prompt-example good">
+                    Modern minimalist living room, white oak floors, floor-to-ceiling windows, neutral color palette, morning sunlight, indoor plants, professional interior photography, 8K
+                </div>
+            </div>
+
+            <div class="help-card compact">
+                <h3><i class="fas fa-times-circle" style="color: var(--danger-color)"></i> Zayıf Prompt</h3>
+                <div class="prompt-example bad">
+                    nice room
+                </div>
+            </div>
+        </div>
+
+        <div class="help-card">
+            <div class="help-card-body">
+                <h3>Anahtar Kelime Kategorileri</h3>
+                <div class="keyword-grid">
+                    <div class="keyword-group">
+                        <h4>Mekan Türü</h4>
+                        <div class="keywords">
+                            <span>living room</span>
+                            <span>bedroom</span>
+                            <span>kitchen</span>
+                            <span>bathroom</span>
+                            <span>dining room</span>
+                            <span>home office</span>
+                            <span>hallway</span>
+                            <span>lobby</span>
+                        </div>
+                    </div>
+                    <div class="keyword-group">
+                        <h4>Stil</h4>
+                        <div class="keywords">
+                            <span>modern minimalist</span>
+                            <span>scandinavian</span>
+                            <span>industrial</span>
+                            <span>mid-century modern</span>
+                            <span>japandi</span>
+                            <span>art deco</span>
+                            <span>bohemian</span>
+                            <span>contemporary luxury</span>
+                        </div>
+                    </div>
+                    <div class="keyword-group">
+                        <h4>Malzeme</h4>
+                        <div class="keywords">
+                            <span>marble countertops</span>
+                            <span>hardwood floors</span>
+                            <span>exposed brick</span>
+                            <span>concrete walls</span>
+                            <span>velvet upholstery</span>
+                            <span>brass fixtures</span>
+                            <span>natural stone</span>
+                        </div>
+                    </div>
+                    <div class="keyword-group">
+                        <h4>Işık & Atmosfer</h4>
+                        <div class="keywords">
+                            <span>natural lighting</span>
+                            <span>warm ambient</span>
+                            <span>golden hour</span>
+                            <span>soft shadows</span>
+                            <span>dramatic lighting</span>
+                            <span>cozy atmosphere</span>
+                        </div>
+                    </div>
+                    <div class="keyword-group">
+                        <h4>Kalite Artırıcı</h4>
+                        <div class="keywords">
+                            <span>professional photography</span>
+                            <span>8K UHD</span>
+                            <span>photorealistic</span>
+                            <span>highly detailed</span>
+                            <span>architectural digest</span>
+                            <span>interior design magazine</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-card">
+            <div class="help-card-body">
+                <h3>Negative Prompt Önerileri</h3>
+                <div class="prompt-example negative">
+                    blurry, low quality, distorted, deformed, watermark, text, ugly, bad proportions, unrealistic furniture, floating objects, bad perspective, cartoon, painting
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECTION: Troubleshooting -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="troubleshooting" class="help-section">
+        <h2><i class="fas fa-wrench"></i> Sorun Giderme</h2>
+        <p class="section-desc">Sık karşılaşılan sorunlar ve çözümleri.</p>
+
+        <div class="help-card">
+            <div class="help-card-body faq-list">
+                <details class="faq-item">
+                    <summary><i class="fas fa-exclamation-triangle"></i> SD WebUI / ComfyUI bağlantı hatası</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>Sunucunun çalıştığından emin olun</li>
+                            <li>SD WebUI'yi <code>--listen --api</code> parametreleriyle başlatın</li>
+                            <li>ComfyUI'yi <code>--listen 0.0.0.0</code> ile başlatın</li>
+                            <li>Firewall'da ilgili portları açın (7860 / 8188)</li>
+                            <li>Ayarlar'dan base URL'i kontrol edin (ör: <code>http://192.168.1.195:7860</code>)</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary><i class="fas fa-exclamation-triangle"></i> "Checkpoint bulunamadı" hatası</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>Model dosyasının doğru klasörde olduğundan emin olun</li>
+                            <li>SD WebUI: <code>models/Stable-diffusion/</code></li>
+                            <li>ComfyUI: <code>models/checkpoints/</code></li>
+                            <li>Model ekledikten sonra sunucuyu yeniden başlatın</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary><i class="fas fa-exclamation-triangle"></i> "CUDA out of memory" hatası</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>Çözünürlüğü düşürün (512x512 veya 768x768)</li>
+                            <li>SD WebUI Forge'da <code>--medvram</code> veya <code>--lowvram</code> kullanın</li>
+                            <li>ComfyUI'da <code>--lowvram</code> parametresiyle başlatın</li>
+                            <li>Batch size'ı 1 olarak bırakın</li>
+                            <li>SDXL modelleri min. 8GB VRAM gerektirir, SD 1.5 modelleri 4GB ile çalışır</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary><i class="fas fa-exclamation-triangle"></i> Upscale modelleri listelenmiyor</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>Model dosyalarını doğru klasöre koyun:</li>
+                            <li>SD WebUI: <code>models/ESRGAN/</code></li>
+                            <li>ComfyUI: <code>models/upscale_models/</code></li>
+                            <li>Model ekledikten sonra sunucuyu yeniden başlatın</li>
+                            <li>ComfyUI kullanıyorsanız <code>extra_model_paths.yaml</code> dosyasını kontrol edin</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary><i class="fas fa-exclamation-triangle"></i> Cloud API "Unauthorized" hatası</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>API anahtarının doğru girildiğini kontrol edin</li>
+                            <li>Anahtarın başında/sonunda boşluk olmadığından emin olun</li>
+                            <li>API hesabınızda yeterli bakiye/kredi olduğunu kontrol edin</li>
+                            <li>Provider'ın Ayarlar'da <strong>Enable</strong> edildiğinden emin olun</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary><i class="fas fa-exclamation-triangle"></i> Üretilen görseller kalitesiz / bozuk</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>CFG Scale'i 5-8 arasında tutun (çok yüksek = bozulma)</li>
+                            <li>Step sayısını artırın (20-30 genellikle yeterli)</li>
+                            <li>Negative prompt kullanın (blurry, low quality, distorted)</li>
+                            <li>Modele uygun çözünürlük kullanın (SDXL: 1024x1024, SD1.5: 512x512)</li>
+                            <li>Sampler olarak "DPM++ 2M Karras" veya "Euler a" deneyin</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function scrollToSection(id, el) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.help-nav-item').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+}
+
+// Highlight nav on scroll
+const sections = document.querySelectorAll('.help-section');
+const navItems = document.querySelectorAll('.help-nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            navItems.forEach(a => a.classList.remove('active'));
+            const target = document.querySelector(`.help-nav-item[href="#${entry.target.id}"]`);
+            if (target) target.classList.add('active');
+        }
+    });
+}, { threshold: 0.2 });
+
+sections.forEach(s => observer.observe(s));
+</script>
+{% endblock %}

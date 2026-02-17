@@ -1,0 +1,33 @@
+<header class="top-nav">
+    <div class="top-nav-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="page-title">
+            {% block page_title %}
+                {% if active_page == 'home' %}Home
+                {% elif active_page == 'projects' %}Projets
+                {% elif active_page == 'canvas' %}Canvas
+                {% elif active_page == 'sketch' %}Sketch
+                {% elif active_page == 'enhance' %}Enhance
+                {% elif active_page == 'floorplan' %}Floorplan
+                {% elif active_page == 'help' %}Yardım
+                {% elif active_page == 'settings' %}Settings
+                {% endif %}
+            {% endblock %}
+        </h1>
+    </div>
+
+    <div class="top-nav-right">
+        <button class="btn-icon" title="Bildirimler">
+            <i class="fas fa-bell"></i>
+        </button>
+        <a href="{{ url_for('views.help_page') }}" class="btn-icon" title="Yardım">
+            <i class="fas fa-question-circle"></i>
+        </a>
+        <div class="user-profile">
+            <i class="fas fa-user-circle"></i>
+            <span class="user-name">Architect</span>
+        </div>
+    </div>
+</header>

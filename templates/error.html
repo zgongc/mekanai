@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}MekanAI - Hata {{ error_code }}{% endblock %}
+
+{% block content %}
+<div class="welcome-section">
+    <i class="fas fa-exclamation-triangle" style="font-size: 64px; color: var(--primary-color); margin-bottom: 20px;"></i>
+    <h2>{{ error_code }}</h2>
+    <p>{{ error_message }}</p>
+    <br>
+    <a href="{{ url_for('views.home') }}" class="btn-primary">
+        <i class="fas fa-home"></i> Ana Sayfa
+    </a>
+</div>
+{% endblock %}

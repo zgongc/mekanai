@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Projeler - MekanAI{% endblock %}
+
+{% block content %}
+<div class="projeler-container">
+    <div class="page-header">
+        <h2>Projelerim</h2>
+        <button class="btn-primary" onclick="openNewProjectModal()">
+            <i class="fas fa-plus"></i> Yeni Proje
+        </button>
+    </div>
+
+    <div class="projects-grid">
+        {% for project in projects %}
+        <a href="/projects/{{ project.id }}" class="project-card">
+            <div class="project-thumbnail">
+                {% if project.latest_image %}
+                <img src="/projects/{{ project.id }}/images/{{ project.latest_image }}" alt="{{ project.name }}" loading="lazy">
+                {% else %}
+                <i class="fas fa-folder-open"></i>
+                {% endif %}
+            </div>
+            <div class="project-info">
+                <h3>{{ project.name }}</h3>
+                <p>{{ project.image_count or 0 }} görsel</p>
+                <p class="project-date">{{ project.created_at }}</p>
+            </div>
+        </a>
+        {% endfor %}
+
+        <div class="project-card new-project" onclick="openNewProjectModal()">
+            <i class="fas fa-plus-circle"></i>
+            <p>Yeni Proje Oluştur</p>
+        </div>
+    </div>
+</div>
+
+<!-- Yeni Proje Modal -->
+<div class="modal-overlay" id="newProjectModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Yeni Proje Oluştur</h3>
+            <button class="modal-close" onclick="closeNewProjectModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <label for="projectName">Proje Adı</label>
+            <input type="text" id="projectName" placeholder="Proje adını girin..." autofocus>
+
+            <label for="projectDesc" style="margin-top: 16px; display: block;">Açıklama (opsiyonel)</label>
+            <input type="text" id="projectDesc" placeholder="Kısa bir açıklama...">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeNewProjectModal()">İptal</button>
+            <button class="btn-primary" onclick="createProject()">Oluştur</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openNewProjectModal() {
+    document.getElementById('newProjectModal').classList.add('active');
+    document.getElementById('projectName').focus();
+}
+
+function closeNewProjectModal() {
+    document.getElementById('newProjectModal').classList.remove('active');
+    document.getElementById('projectName').value = '';
+    document.getElementById('projectDesc').value = '';
+}
+
+async function createProject() {
+    const name = document.getElementById('projectName').value.trim();
+    const description = document.getElementById('projectDesc').value.trim();
+
+    if (!name) {
+        alert('Proje adı gerekli!');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/projects', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            closeNewProjectModal();
+            location.reload();
+        } else {
+            alert(data.message || 'Bir hata oluştu');
+        }
+    } catch (err) {
+        alert('Bağlantı hatası');
+    }
+}
+
+// ESC ile modal kapat
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeNewProjectModal();
+});
+
+// Overlay tıklayınca kapat
+document.getElementById('newProjectModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeNewProjectModal();
+});
+</script>
+{% endblock %}

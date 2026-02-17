@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Home - MekanAI{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="welcome-section">
+        <h2>AI Destekli İç Mimari Tasarım Platformu</h2>
+        <p>Prompt'tan görsel oluşturun, sketch'lerinizi gerçek tasarımlara dönüştürün</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-magic"></i>
+            <h3>Text-to-Image</h3>
+            <p>Yazılı açıklamalardan profesyonel iç mekan görselleri oluşturun</p>
+            <a href="{{ url_for('views.canvas') }}" class="btn-primary">Başlat</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-pencil-alt"></i>
+            <h3>Sketch-to-Image</h3>
+            <p>El çizimlerinizi fotorealistik tasarımlara dönüştürün</p>
+            <a href="{{ url_for('views.sketch') }}" class="btn-primary">Başlat</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-expand"></i>
+            <h3>Image Enhancement</h3>
+            <p>Görsellerinizi yüksek çözünürlükte optimize edin</p>
+            <a href="{{ url_for('views.enhance') }}" class="btn-primary">Başlat</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-map-marked-alt"></i>
+            <h3>Floorplan AI</h3>
+            <p>Yapay zeka ile kat planları oluşturun ve optimize edin</p>
+            <a href="{{ url_for('views.floorplan') }}" class="btn-primary">Başlat</a>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <div class="stat-item">
+            <h4>SD WebUI / ComfyUI</h4>
+            <p>Lokal Görsel Üretim</p>
+        </div>
+        <div class="stat-item">
+            <h4>OpenAI / Stability AI</h4>
+            <p>Cloud API</p>
+        </div>
+        <div class="stat-item">
+            <h4>Gemini / Grok</h4>
+            <p>Cloud API</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

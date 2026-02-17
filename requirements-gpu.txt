@@ -1,0 +1,7 @@
+# GPU / Local SD - AI Image Generation
+# Torch CUDA kurulumu: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+torch
+torchvision
+diffusers
+transformers
+accelerate
