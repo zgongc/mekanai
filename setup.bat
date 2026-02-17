@@ -5,7 +5,7 @@ echo ========================================
 echo.
 
 :: Check Python
-echo [1/4] Checking Python...
+echo [1/3] Checking Python...
 py -c "" >tmp_stdout.txt 2>tmp_stderr.txt
 if %ERRORLEVEL% == 0 goto :python_found
 
@@ -68,7 +68,7 @@ echo [OK] Python installed
 echo.
 
 :: Virtual Environment
-echo [2/4] Checking Virtual Environment...
+echo [2/3] Checking Virtual Environment...
 if exist "venv\" goto :venv_exists
 
 echo [*] Creating virtual environment...
@@ -88,7 +88,6 @@ echo [OK] Virtual environment exists
 
 :activate_venv
 echo.
-echo [3/4] Activating virtual environment...
 call venv\Scripts\activate.bat
 if %ERRORLEVEL% == 0 goto :venv_activated
 
@@ -106,40 +105,9 @@ echo [OK] pip updated
 echo.
 
 :: Install packages
-echo [4/4] Installing packages...
+echo [3/3] Installing packages...
 pip install -r requirements.txt --quiet
 echo [OK] Packages installed
-echo.
-
-:: GPU packages (optional)
-echo ========================================
-echo    GPU / Local SD WebUI Support
-echo ========================================
-echo.
-echo Install PyTorch + CUDA?
-echo (Only needed if you have an NVIDIA GPU and will use local SD WebUI)
-echo.
-echo    [1] Yes - Install PyTorch with CUDA 12.1 (recommended, ~3GB)
-echo    [2] No  - I will only use Cloud APIs
-echo.
-set /p gpu_choice="Your choice (1/2): "
-
-if "%gpu_choice%"=="1" goto :install_gpu
-echo [*] GPU packages skipped.
-echo     You can install later:
-echo     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-echo     pip install -r requirements-gpu.txt
-goto :finish_setup
-
-:install_gpu
-echo.
-echo [*] Installing PyTorch CUDA... (This may take a few minutes)
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121 --quiet
-echo [*] Installing other GPU packages...
-pip install -r requirements-gpu.txt --quiet
-echo [OK] GPU packages installed
-
-:finish_setup
 echo.
 echo ========================================
 echo    [OK] SETUP COMPLETE!
