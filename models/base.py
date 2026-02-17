@@ -36,8 +36,8 @@ def init_db():
 
     Base.metadata.create_all(bind=engine)
 
-    _run_migrations()
     _seed_all()
+    _run_migrations()
     print("[+] DB initialized (SQLAlchemy ORM)")
 
 
