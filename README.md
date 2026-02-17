@@ -29,16 +29,33 @@ Lokal SD WebUI Forge + Cloud API (Gemini, Stability AI, OpenAI, Grok) hybrid ç�
 
 ## Hızlı Kurulum
 
-### Windows (Otomatik)
+### Windows
+
+1. Sayfanın üst kısmındaki yeşil **`<> Code`** butonuna tıklayın → **Download ZIP** seçin
+2. ZIP dosyasını indirin ve bir klasöre çıkartın
+3. **`setup.bat`** dosyasına çift tıklayın — Python, sanal ortam ve tüm paketler otomatik kurulur
+4. Kurulum bitince **`start.bat`** dosyasına çift tıklayın
+5. Tarayıcınız otomatik açılacak: **http://localhost:5000**
+
+> Python yüklü değilse setup.bat sizin için otomatik indirip kurar.
+
+### Linux / Mac
+
+```bash
+git clone https://github.com/zgongc/mekanai.git
+cd mekanai
+chmod +x setup.sh start.sh
+./setup.sh      # kurulum (bir kez)
+./start.sh      # başlat
 ```
-setup.bat
-```
-Python, venv ve tüm paketleri otomatik kurar.
 
 ### Manuel Kurulum
+
+Yukarıdaki yöntemler çalışmazsa adım adım:
+
 ```bash
 # 1. Virtual environment oluştur
-python -m venv venv
+python3 -m venv venv
 
 # 2. Aktive et
 venv\Scripts\activate        # Windows
@@ -55,11 +72,6 @@ pip install -r requirements-gpu.txt
 python app.py
 ```
 
-### Başlatma
-```bash
-start.bat                    # Windows
-python app.py                # Manuel
-```
 Tarayıcıda: **http://localhost:5000**
 
 ## Proje Yapısı
@@ -110,6 +122,6 @@ Settings > Providers'dan SD WebUI URL'ini ayarlayın (varsayılan: `http://local
 |-------|----------|
 | `requirements.txt` | Temel paketler (Flask, SQLAlchemy, Pillow...) |
 | `requirements-gpu.txt` | GPU paketleri (torch, diffusers, transformers) |
-| `setup.bat` | Windows otomatik kurulum |
-| `start.bat` | Uygulamayı başlatma |
+| `setup.bat` / `setup.sh` | Otomatik kurulum (Windows / Linux) |
+| `start.bat` / `start.sh` | Uygulamayı başlatma (Windows / Linux) |
 | `configs/config.yaml` | Uygulama ayarları |
